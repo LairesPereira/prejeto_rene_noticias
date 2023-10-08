@@ -2,6 +2,7 @@ from warnin_colors import bcolors
 from login import fazer_login
 from fazer_cadastro_adm import fazer_cadastro_adm
 from fazer_cadastro_usuario import fazer_cadastro_usuario
+from fazer_cadastro import fazer_cadastro
 
 # controle para saber se o usuário está logado
 # usuarios e adm cadastros são listas que serão preenchidas
@@ -50,34 +51,45 @@ while login == False:
         # ------------------------------------------------------------------------------------------------------------
         
         # CADASTRAR ADM
-        elif(opção_inicial == 2):
+        elif(opção_inicial == 2 or opção_inicial == 3):
+
+        # Criando cadastro um pouco mais dinamico
+            if(opção_inicial == 2):
+                dados_cadastro = fazer_cadastro('ADM')
+                nome_adm = dados_cadastro[0] # "desmontamos" a lista dentro de outras variáveis
+                senha_adm = dados_cadastro[1]
+                adm_cadastrado.append(nome_adm) # e só então colocamos cada peça dentro da lista de cadastrados
+                adm_cadastrado.append(senha_adm)
+            else:
+                print(fazer_cadastro('USUARIO'))
+            
+        # ------------------------------------------------------------------------------------------------------------
+
+
              # chaamos uma função especifica da mesma forma da anterior, 
              # LEMBRE QUE ELA RETORNA UMA LISTA contendo as informacoes fornecidas pelo adm
-            dados_adm_cadastro = fazer_cadastro_adm()
+            # dados_adm_cadastro = fazer_cadastro_adm()
 
             # aqui, entretando não podemos colocar a resposta da função fazer cadastro
             # diretamente dentro da lista pois estariamos inserindo uma lista dentro de outra
-            nome_adm = dados_adm_cadastro[0] # "desmontamos" a lista dentro de outras variáveis
-            senha_adm = dados_adm_cadastro[1]
-            adm_cadastrado.append(nome_adm) # e só então colocamos cada peça dentro da lista de cadastrados
-            adm_cadastrado.append(senha_adm)
-            print(bcolors.OKGREEN + 'ADM cadastrado com sucesso!')
+            
+            # print(bcolors.OKGREEN + 'ADM cadastrado com sucesso!')
             #
             # Leva-lo para página de ADM
             #
         
         # ------------------------------------------------------------------------------------------------------------
 
-        elif(opção_inicial == 3):
-            dados_usuario_cadastro = fazer_cadastro_usuario()
-            nome_usuario = dados_usuario_cadastro[0]
-            senha_usuario = dados_usuario_cadastro[1]
-            usuarios_cadastrados.append(nome_usuario)
-            usuarios_cadastrados.append(senha_usuario)
-            print(bcolors.OKGREEN + 'Usuário cadastrado com sucesso!')
-            #
-            # Leva-lo para página de usuário
-            #
+        # elif(opção_inicial == 3):
+        #     dados_usuario_cadastro = fazer_cadastro_usuario()
+        #     nome_usuario = dados_usuario_cadastro[0]
+        #     senha_usuario = dados_usuario_cadastro[1]
+        #     usuarios_cadastrados.append(nome_usuario)
+        #     usuarios_cadastrados.append(senha_usuario)
+        #     print(bcolors.OKGREEN + 'Usuário cadastrado com sucesso!')
+        #     #
+        #     # Leva-lo para página de usuário
+        #     #
         
         elif(opção_inicial == 0):
             break
