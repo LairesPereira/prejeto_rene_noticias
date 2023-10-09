@@ -9,10 +9,14 @@ from art import *
 # nas opções de cadastros
 
 login = False
+
+# as listas de cadastro tem o formato ['nome', 'senha']
 usuarios_cadastrados = []
 adm_cadastrados = []
 
-tprint('breaking news', font='cybermedium')
+
+
+tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
 
 # o sistema irá rodar até alguém ou algo interromper o programa
@@ -23,8 +27,10 @@ while login == False:
         pass 
     else:
         opção_inicial = input(text_colors.OKBLUE + 'Digite 1 para Login, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para sair: ')
-        
+
         # autenticação do usuário (LOGIN)
+        # toda a parte de autenticacao fica na resposabilidade de login
+        # index vai apenas verificar quem logou e redirecionar para as paginas adqueadas
         if(opção_inicial == '1'):
             tentar_logar = fazer_login(usuarios_cadastrados, adm_cadastrados) 
             if (tentar_logar == 'adm logado'):
@@ -32,18 +38,16 @@ while login == False:
             elif(tentar_logar == 'usuario logado'):
                 print('CRIAR MENU USUARIO')
         # ------------------------------------------------------------------------------------------------------------
-        
         # CADASTRAR
         elif(opção_inicial == '2' or opção_inicial == '3'):
             if(opção_inicial == '2'):
                 dados_cadastro = fazer_cadastro('ADM')
-                adm_cadastrados.append(dados_cadastro)
+                adm_cadastrados.append(dados_cadastro) # adiciona lista dentro de lista para cadastrar multiplos usuarios
             else:
                 dados_cadastro = fazer_cadastro('USUARIO')
                 usuarios_cadastrados.append(dados_cadastro)
             
         # ------------------------------------------------------------------------------------------------------------
-
         elif(opção_inicial == '0'):
             break
         else:

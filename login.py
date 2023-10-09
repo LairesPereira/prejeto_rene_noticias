@@ -10,6 +10,11 @@ def fazer_login(lista_usuarios, lista_adms):
 
     print(lista_usuarios, lista_adms)
     
+
+    # fazer login recebe do programa principal as duas listas
+    # de usuarios e adms cadastras e faz um loop sobre cada uma
+    # se a lista de dados que o usuario inseriu para login for igual
+    # a alguma das listas recebidas liberamos o login de volta para o programa principal
     for lista in lista_adms:
         if(dados == lista):
             print(text_colors.OKGREEN + 'ADM logado com sucesso!')
