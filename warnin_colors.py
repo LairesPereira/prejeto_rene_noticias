@@ -1,5 +1,5 @@
 # definindo cores padrao para printar no terminal
-class bcolors:
+class text_colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -10,4 +10,3 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-print(bcolors.FAIL) 

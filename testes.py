@@ -1,1 +1,3 @@
-print('Ola')
+from art import *
+
+tprint('coffe', font='bulbhead')
