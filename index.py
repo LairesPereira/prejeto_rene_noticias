@@ -1,3 +1,6 @@
+# AUTORES MONIQUE E LAIRES
+
+
 from warnin_colors import text_colors
 from login import fazer_login
 from fazer_cadastro import fazer_cadastro
@@ -10,7 +13,7 @@ from art import *
 
 login = False
 
-# as listas de cadastro tem o formato ['nome', 'senha']
+# as listas de cadastro tem o formato [['nome', 'senha']]
 usuarios_cadastrados = []
 adm_cadastrados = [['laires', '123']]
 
