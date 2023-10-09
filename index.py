@@ -17,7 +17,6 @@ tprint('catolica - pb', font='cybersmall')
 
 # o sistema irá rodar até alguém ou algo interromper o programa
 while login == False:
-
     if(login):
         # opcoes de usuario logado
         # nesse momento não precisamos dessa opção
@@ -27,27 +26,21 @@ while login == False:
         
         # autenticação do usuário (LOGIN)
         if(opção_inicial == '1'):
-            # fazer login retorna ['nome', 'senha']
-            dados_do_usuario = fazer_login() 
-            if(dados_do_usuario == usuarios_cadastrados):
-                    print(text_colors.OKGREEN + 'Você foi logado com sucesso!')
-                    # CRIAR MENU DE USUARIO LOGADO
-            elif(dados_do_usuario == adm_cadastrados):
-                    print(text_colors.OKGREEN + 'Você foi logado com sucesso!')
-                    menu_ADM()
-            else:
-                print(text_colors.FAIL + 'Usuário ou senha inválidos!')
-
+            tentar_logar = fazer_login(usuarios_cadastrados, adm_cadastrados) 
+            if (tentar_logar == 'adm logado'):
+                menu_ADM()
+            elif(tentar_logar == 'usuario logado'):
+                print('CRIAR MENU USUARIO')
         # ------------------------------------------------------------------------------------------------------------
         
         # CADASTRAR
         elif(opção_inicial == '2' or opção_inicial == '3'):
             if(opção_inicial == '2'):
                 dados_cadastro = fazer_cadastro('ADM')
-                adm_cadastrados = dados_cadastro
+                adm_cadastrados.append(dados_cadastro)
             else:
                 dados_cadastro = fazer_cadastro('USUARIO')
-                usuarios_cadastrados = dados_cadastro
+                usuarios_cadastrados.append(dados_cadastro)
             
         # ------------------------------------------------------------------------------------------------------------
 
