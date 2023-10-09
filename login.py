@@ -1,9 +1,10 @@
 from warnin_colors import text_colors
+from getpass import getpass
 
 def fazer_login(lista_usuarios, lista_adms):
         dados = []
         nome = input(text_colors.OKBLUE + 'Digite seu nome: ')
-        senha = input(text_colors.OKBLUE + 'Digite sua senha: ')
+        senha = getpass(text_colors.OKBLUE + 'Digite sua senha: ')
         dados.append(nome)
         dados.append(senha)
 
@@ -21,6 +22,3 @@ def fazer_login(lista_usuarios, lista_adms):
                 return 'usuario logado'
         
         print(text_colors.FAIL + 'Usuário ou senha inválidos!')
-
-
-

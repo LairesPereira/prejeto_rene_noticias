@@ -1,5 +1,5 @@
 from warnin_colors import text_colors
-
+from getpass import getpass
 # Para próxima etapa separar funçao de fazer 
 # cadastro da logica de validação de senha
 
@@ -8,8 +8,8 @@ def fazer_cadastro(quem_cadastrar, usuarios_cadastrados, adms_cadastrados):
         print(text_colors.OKGREEN + f'Fazendo Cadastro de {quem_cadastrar} ... \n')
         dados_cadastro = [] # no final, nossa funcao devolverá essa lista para o programa principal
         nome_cadastro = input(text_colors.OKBLUE + 'Digite seu nome: ')
-        senha_cadastro = input(text_colors.OKBLUE + 'Digite sua senha: ')
-        confirmacao_senha = input(text_colors.OKBLUE + 'Digite novamente sua senha: ')
+        senha_cadastro = getpass(text_colors.OKBLUE + 'Digite sua senha: ')
+        confirmacao_senha = getpass(text_colors.OKBLUE + 'Digite novamente sua senha: ')
 
         # senha e nome não podem ser string vazia
         if((senha_cadastro == confirmacao_senha) and (senha_cadastro != '') and nome_cadastro != ''):

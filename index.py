@@ -1,6 +1,5 @@
 # AUTORES MONIQUE E LAIRES
 
-
 from warnin_colors import text_colors
 from login import fazer_login
 from fazer_cadastro import fazer_cadastro
