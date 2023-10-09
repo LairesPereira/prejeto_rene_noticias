@@ -12,9 +12,7 @@ login = False
 
 # as listas de cadastro tem o formato ['nome', 'senha']
 usuarios_cadastrados = []
-adm_cadastrados = []
-
-
+adm_cadastrados = [['laires', '123']]
 
 tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
@@ -40,13 +38,12 @@ while login == False:
         # ------------------------------------------------------------------------------------------------------------
         # CADASTRAR
         elif(opção_inicial == '2' or opção_inicial == '3'):
-            if(opção_inicial == '2'):
-                dados_cadastro = fazer_cadastro('ADM')
-                adm_cadastrados.append(dados_cadastro) # adiciona lista dentro de lista para cadastrar multiplos usuarios
-            else:
-                dados_cadastro = fazer_cadastro('USUARIO')
+            cadastrar = 'ADM' if opção_inicial == '2' else 'USUARIO'
+            dados_cadastro = fazer_cadastro(cadastrar, usuarios_cadastrados, adm_cadastrados)
+            if(cadastrar == 'ADM' and dados_cadastro): 
+                adm_cadastrados.append(dados_cadastro)
+            elif(cadastrar == 'USUARIO' and dados_cadastro):
                 usuarios_cadastrados.append(dados_cadastro)
-            
         # ------------------------------------------------------------------------------------------------------------
         elif(opção_inicial == '0'):
             break
