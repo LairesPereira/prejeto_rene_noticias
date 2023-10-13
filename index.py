@@ -9,13 +9,74 @@ from art import *
 # controle para saber se o usuário está logado
 # usuarios e adm cadastros são listas que serão preenchidas
 # nas opções de cadastros
+# fazer requirementos
 
 login = False
 
 # as listas de cadastro tem o formato [['nome', 'senha']]
-usuarios_cadastrados = []
-adm_cadastrados = [['laires', '123']]
+usuarios_cadastrados = [{
+    'id': '1', 
+    'nome_usuario': 'monique',
+    'senha': '123',
+    'nome_completo': 'laires pereira soares',
+    'cpf': '433.941.708.41',
+    'noticias_publicadas': {},
+    'noticias_favoritas': {},
+    'noticias_compartilhaads': {},
+    'comentarios_em_noticias': {},
+},
+]
 
+
+adm_cadastrados = [{
+    'id': '1', 
+    'nome_usuario': 'laires',
+    'senha': '123',
+    'nome_completo': 'laires pereira soares',
+    'cpf': '433.941.708.41',
+    'noticias_publicadas': {},
+    'noticias_favoritas': {},
+    'noticias_compartilhaads': {},
+    'comentarios_em_noticias': {},
+},
+{
+    'id': '2', 
+    'nome_usuario': 'rene',
+    'senha': '123',
+    'nome_completo': 'laires pereira soares',
+    'cpf': '433.941.708.41',
+    'noticias_publicadas': {},
+    'noticias_favoritas': {},
+    'noticias_compartilhaads': {},
+    'comentarios_em_noticias': {},
+}
+]
+
+"""
+ADMINISTRADOR
+{
+    id:
+    nome_usuario:
+    nome_completo
+    cpf:
+    noticias_publicadas: {}
+    noticias_favoritas: {}
+    noticias_compartilhaads: {}
+    comentarios_em_noticias: {}
+}
+
+USUARIO
+{
+    id:
+    nome_usuario:
+    senha: 
+    nome_completo
+    cpf:
+    noticias_favoritas: {}
+    noticias_compartilhaads: {}
+    comentarios_em_noticias: {}
+}
+"""
 tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
 
@@ -33,9 +94,9 @@ while login == False:
         # index vai apenas verificar quem logou e redirecionar para as paginas adqueadas
         if(opção_inicial == '1'):
             tentar_logar = fazer_login(usuarios_cadastrados, adm_cadastrados) 
-            if (tentar_logar == 'adm logado'):
+            if (tentar_logar == 'adm_logado'):
                 menu_ADM()
-            elif(tentar_logar == 'usuario logado'):
+            elif(tentar_logar == 'usuario_logado'):
                 print('CRIAR MENU USUARIO')
         # ------------------------------------------------------------------------------------------------------------
         # CADASTRAR
