@@ -1,9 +1,13 @@
 from warnin_colors import text_colors
 from getpass import getpass
+from lista_usuarios_cadastrados import ler_usuarios_cadastrados, atualizar_usuarios_cadastrados
 # Para próxima etapa separar funçao de fazer 
 # cadastro da logica de validação de senha
 
-def fazer_cadastro(quem_cadastrar, usuarios_cadastrados, adms_cadastrados):
+usuarios_cadastrados = ler_usuarios_cadastrados('USUARIOS')
+adms_cadastrados = ler_usuarios_cadastrados('ADM')
+
+def fazer_cadastro(quem_cadastrar):
     while True:
         print(text_colors.OKGREEN + f'Fazendo Cadastro de {quem_cadastrar} ... \n')
         nome_usuario = input(text_colors.OKBLUE + 'Digite seu nome de usuário: ')
@@ -25,6 +29,7 @@ def fazer_cadastro(quem_cadastrar, usuarios_cadastrados, adms_cadastrados):
 
         # senha e nome não podem ser string vazia
         if((dados_cadastro['senha'] == confirmacao_senha) and (dados_cadastro['senha'] != '') and dados_cadastro['nome_usuario'] != ''):
+            print(usuarios_cadastrados)
             for usuario in usuarios_cadastrados:
                 if(usuario['nome_usuario'] == dados_cadastro['nome_usuario']):
                     print('Usuário já cadastrado')

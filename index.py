@@ -3,6 +3,7 @@
 from warnin_colors import text_colors
 from login import fazer_login
 from fazer_cadastro import fazer_cadastro
+from lista_usuarios_cadastrados import ler_usuarios_cadastrados, atualizar_usuarios_cadastrados
 from menu_ADM import menu_ADM
 from art import *
 
@@ -13,70 +14,9 @@ from art import *
 
 login = False
 
-# as listas de cadastro tem o formato [['nome', 'senha']]
-usuarios_cadastrados = [{
-    'id': '1', 
-    'nome_usuario': 'monique',
-    'senha': '123',
-    'nome_completo': 'laires pereira soares',
-    'cpf': '433.941.708.41',
-    'noticias_publicadas': {},
-    'noticias_favoritas': {},
-    'noticias_compartilhaads': {},
-    'comentarios_em_noticias': {},
-},
-]
+adm_cadastrados = ler_usuarios_cadastrados('ADM')
+usuarios_cadastrados = ler_usuarios_cadastrados('USUARIO')
 
-
-adm_cadastrados = [{
-    'id': '1', 
-    'nome_usuario': 'laires',
-    'senha': '123',
-    'nome_completo': 'laires pereira soares',
-    'cpf': '433.941.708.41',
-    'noticias_publicadas': {},
-    'noticias_favoritas': {},
-    'noticias_compartilhaads': {},
-    'comentarios_em_noticias': {},
-},
-{
-    'id': '2', 
-    'nome_usuario': 'rene',
-    'senha': '123',
-    'nome_completo': 'laires pereira soares',
-    'cpf': '433.941.708.41',
-    'noticias_publicadas': {},
-    'noticias_favoritas': {},
-    'noticias_compartilhaads': {},
-    'comentarios_em_noticias': {},
-}
-]
-
-"""
-ADMINISTRADOR
-{
-    id:
-    nome_usuario:
-    nome_completo
-    cpf:
-    noticias_publicadas: {}
-    noticias_favoritas: {}
-    noticias_compartilhaads: {}
-    comentarios_em_noticias: {}
-}
-
-USUARIO
-{
-    id:
-    nome_usuario:
-    senha: 
-    nome_completo
-    cpf:
-    noticias_favoritas: {}
-    noticias_compartilhaads: {}
-    comentarios_em_noticias: {}
-}
-"""
 tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
 
@@ -102,11 +42,11 @@ while login == False:
         # CADASTRAR
         elif(opção_inicial == '2' or opção_inicial == '3'):
             cadastrar = 'ADM' if opção_inicial == '2' else 'USUARIO'
-            dados_cadastro = fazer_cadastro(cadastrar, usuarios_cadastrados, adm_cadastrados)
+            dados_cadastro = fazer_cadastro(cadastrar)
             if(cadastrar == 'ADM' and dados_cadastro): 
-                adm_cadastrados.append(dados_cadastro)
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
             elif(cadastrar == 'USUARIO' and dados_cadastro):
-                usuarios_cadastrados.append(dados_cadastro)
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
         # ------------------------------------------------------------------------------------------------------------
         elif(opção_inicial == '0'):
             break
