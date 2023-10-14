@@ -1,6 +1,7 @@
 from warnin_colors import text_colors
 from getpass import getpass
-from lista_usuarios_cadastrados import ler_usuarios_cadastrados, atualizar_usuarios_cadastrados
+from lista_usuarios_cadastrados import ler_usuarios_cadastrados, ultimo_id_cadastrado
+
 # Para próxima etapa separar funçao de fazer 
 # cadastro da logica de validação de senha
 
@@ -15,7 +16,11 @@ def fazer_cadastro(quem_cadastrar):
         senha = getpass(text_colors.OKBLUE + 'Digite sua senha: ')
         confirmacao_senha = getpass(text_colors.OKBLUE + 'Digite sua senha novamente: ')
 
+        isAdm = True if quem_cadastrar == 'ADM' else False
+        print(ultimo_id_cadastrado(quem_cadastrar))
+
         dados_cadastro = { # no final, nossa funcao devolverá essa lista para o programa principal
+            'id': ultimo_id_cadastrado(quem_cadastrar) + 1,
             'nome_usuario': nome_usuario,
             'senha': senha,
             'nome_completo': nome_completo,
@@ -24,6 +29,7 @@ def fazer_cadastro(quem_cadastrar):
             'noticias_favoritas': {},
             'noticias_compartilhaads': {},
             'comentarios_em_noticias': {},
+            'isAdm': isAdm
         }
 
 

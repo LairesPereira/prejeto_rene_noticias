@@ -3,6 +3,7 @@ noticias = [{
     'titulo': '',
     'autor': '',
     'data': '',
+    'texto': '',
     'curtidas': 0,
     'comentários': {},
     'repostagens': {},

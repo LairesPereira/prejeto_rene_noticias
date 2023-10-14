@@ -1,3 +1,4 @@
 
-def inserir_noticia():
+def inserir_noticia(usuario):
+    print (usuario,'aqui')
     pass

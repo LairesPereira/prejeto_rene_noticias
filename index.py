@@ -16,6 +16,7 @@ login = False
 
 adm_cadastrados = ler_usuarios_cadastrados('ADM')
 usuarios_cadastrados = ler_usuarios_cadastrados('USUARIO')
+usuario_logado = {}
 
 tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
@@ -28,14 +29,15 @@ while login == False:
         pass 
     else:
         opção_inicial = input(text_colors.OKBLUE + 'Digite 1 para Login, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para sair: ')
-
-        # autenticação do usuário (LOGIN)
-        # toda a parte de autenticacao fica na resposabilidade de login
-        # index vai apenas verificar quem logou e redirecionar para as paginas adqueadas
+        
         if(opção_inicial == '1'):
             tentar_logar = fazer_login(usuarios_cadastrados, adm_cadastrados) 
-            if (tentar_logar == 'adm_logado'):
-                menu_ADM()
+            if(tentar_logar == 'fail'):
+                print('erro')
+            elif (tentar_logar['isAdm']):
+                usuario_logado = tentar_logar
+                print(tentar_logar, usuario_logado)
+                menu_ADM(usuario_logado)
             elif(tentar_logar == 'usuario_logado'):
                 print('CRIAR MENU USUARIO')
         # ------------------------------------------------------------------------------------------------------------
