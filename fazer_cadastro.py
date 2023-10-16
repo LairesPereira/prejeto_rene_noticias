@@ -17,7 +17,6 @@ def fazer_cadastro(quem_cadastrar):
         confirmacao_senha = getpass(text_colors.OKBLUE + 'Digite sua senha novamente: ')
 
         isAdm = True if quem_cadastrar == 'ADM' else False
-        print(ultimo_id_cadastrado(quem_cadastrar))
 
         dados_cadastro = { # no final, nossa funcao devolverá essa lista para o programa principal
             'id': ultimo_id_cadastrado(quem_cadastrar) + 1,
@@ -35,7 +34,6 @@ def fazer_cadastro(quem_cadastrar):
 
         # senha e nome não podem ser string vazia
         if((dados_cadastro['senha'] == confirmacao_senha) and (dados_cadastro['senha'] != '') and dados_cadastro['nome_usuario'] != ''):
-            print(usuarios_cadastrados)
             for usuario in usuarios_cadastrados:
                 if(usuario['nome_usuario'] == dados_cadastro['nome_usuario']):
                     print(text_colors.FAIL + 'Usuário já cadastrado')

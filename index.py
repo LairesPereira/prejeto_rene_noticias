@@ -46,9 +46,9 @@ while True:
         
         if(opção_inicial == '1'):
             tentar_logar = fazer_login(usuarios_cadastrados, adm_cadastrados) 
-            if(tentar_logar == 'fail'):
-                print('erro')
-            elif (tentar_logar['isAdm']):
+            if(tentar_logar == None):
+                continue
+            elif(tentar_logar['isAdm']):
                 usuario_logado = tentar_logar
                 print(text_colors.OKGREEN + 'ADM LOGADO')
                 login = True
