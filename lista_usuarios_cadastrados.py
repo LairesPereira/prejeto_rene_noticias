@@ -63,6 +63,3 @@ def ultimo_id_cadastrado(tipo_usuario):
             return 0
         return usuarios_cadastrados[-1]['id']
 
-
-
-ultimo_id_cadastrado('ADM')

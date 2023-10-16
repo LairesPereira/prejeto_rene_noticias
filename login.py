@@ -10,7 +10,7 @@ def fazer_login(lista_usuarios, lista_adms):
      
      if(dados['nome_usuario'] == '' or dados['senha']== ''):
           print(text_colors.FAIL + 'Dados inválidos!')
-          return 'fail'
+          return None
 
      for adm in lista_adms:
           if((adm['nome_usuario'] == dados['nome_usuario']) and (adm['senha'] == dados['senha'])):
