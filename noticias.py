@@ -1,5 +1,5 @@
 noticias = [{
-    id: 1,
+    'id': 1,
     'titulo': '',
     'autor': '',
     'data': '',
@@ -13,6 +13,14 @@ noticias = [{
 def listar_todas_noticias():
     return noticias
 
-def insrir_nova_noticia():
+def inserir_noticia_BD(nova_noticia):
+    noticias.append(nova_noticia)
+    print(nova_noticia)
     pass
 
+def ultimo_id():
+    if(len(noticias) == 0): 
+        return 0
+    return noticias[-1]['id']
+
+print(ultimo_id())

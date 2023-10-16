@@ -55,8 +55,12 @@ def atualizar_usuarios_cadastrados(tipo_usuario, novo_usuario):
 
 def ultimo_id_cadastrado(tipo_usuario):
     if tipo_usuario == 'ADM':
+        if(len(adm_cadastrados) == 0): 
+            return 0
         return adm_cadastrados[-1]['id']
     else:
+        if(len(adm_cadastrados) == 0): 
+            return 0
         return usuarios_cadastrados[-1]['id']
 
 

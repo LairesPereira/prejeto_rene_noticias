@@ -3,7 +3,6 @@ from getpass import getpass
 from lista_usuarios_cadastrados import ler_usuarios_cadastrados
 
 def fazer_login(lista_usuarios, lista_adms):
-     print(lista_adms)
      dados = {
           'nome_usuario': input(text_colors.OKBLUE + 'Digite seu nome: '),
           'senha': getpass(text_colors.OKBLUE + 'Digite sua senha: ')
@@ -14,10 +13,8 @@ def fazer_login(lista_usuarios, lista_adms):
           return 'fail'
 
      for adm in lista_adms:
-          print(adm)
           if((adm['nome_usuario'] == dados['nome_usuario']) and (adm['senha'] == dados['senha'])):
                print(text_colors.OKGREEN + 'ADM logado com sucesso!')
-               print(adm)
                return adm
 
      for usuario in lista_usuarios:
