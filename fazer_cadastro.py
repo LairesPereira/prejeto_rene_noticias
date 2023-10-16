@@ -38,7 +38,7 @@ def fazer_cadastro(quem_cadastrar):
             print(usuarios_cadastrados)
             for usuario in usuarios_cadastrados:
                 if(usuario['nome_usuario'] == dados_cadastro['nome_usuario']):
-                    print('Usuário já cadastrado')
+                    print(text_colors.FAIL + 'Usuário já cadastrado')
                     return
             for adms in adms_cadastrados:
                 if(adms['nome_usuario'] == dados_cadastro['nome_usuario']):

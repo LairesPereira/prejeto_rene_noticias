@@ -22,11 +22,25 @@ tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
 
 # o sistema irá rodar até alguém ou algo interromper o programa
-while login == False:
+while True:
     if(login):
+        if usuario_logado['isAdm']:
+            opcao_logado = input(text_colors.OKBLUE + '1 para acessar o menu ADM, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para fazer sair: ')
         # opcoes de usuario logado
-        # nesse momento não precisamos dessa opção
-        pass 
+        if(opcao_logado == '1'): 
+            menu_ADM(usuario_logado)
+        elif(opcao_logado == '2' or opcao_logado == '3'):
+            cadastrar = 'ADM' if opcao_logado == '2' else 'USUARIO'
+            dados_cadastro = fazer_cadastro(cadastrar)
+            if(cadastrar == 'ADM' and dados_cadastro): 
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
+            elif(cadastrar == 'USUARIO' and dados_cadastro):
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
+        elif opcao_logado == '0':
+            usuario_logado = {}
+            login = False
+            pass
+        
     else:
         opção_inicial = input(text_colors.OKBLUE + 'Digite 1 para Login, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para sair: ')
         
@@ -36,7 +50,8 @@ while login == False:
                 print('erro')
             elif (tentar_logar['isAdm']):
                 usuario_logado = tentar_logar
-                print(tentar_logar, usuario_logado)
+                print(text_colors.OKGREEN + 'ADM LOGADO')
+                login = True
                 menu_ADM(usuario_logado)
             elif(tentar_logar == 'usuario_logado'):
                 print('CRIAR MENU USUARIO')
