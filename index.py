@@ -3,6 +3,7 @@
 from warnin_colors import text_colors
 from login import fazer_login
 from fazer_cadastro import fazer_cadastro
+from lista_usuarios_cadastrados import ler_usuarios_cadastrados, atualizar_usuarios_cadastrados
 from menu_ADM import menu_ADM
 from art import *
 
@@ -13,100 +14,56 @@ from art import *
 
 login = False
 
-# as listas de cadastro tem o formato [['nome', 'senha']]
-usuarios_cadastrados = [{
-    'id': '1', 
-    'nome_usuario': 'monique',
-    'senha': '123',
-    'nome_completo': 'laires pereira soares',
-    'cpf': '433.941.708.41',
-    'noticias_publicadas': {},
-    'noticias_favoritas': {},
-    'noticias_compartilhaads': {},
-    'comentarios_em_noticias': {},
-},
-]
+adm_cadastrados = ler_usuarios_cadastrados('ADM')
+usuarios_cadastrados = ler_usuarios_cadastrados('USUARIO')
+usuario_logado = {}
 
-
-adm_cadastrados = [{
-    'id': '1', 
-    'nome_usuario': 'laires',
-    'senha': '123',
-    'nome_completo': 'laires pereira soares',
-    'cpf': '433.941.708.41',
-    'noticias_publicadas': {},
-    'noticias_favoritas': {},
-    'noticias_compartilhaads': {},
-    'comentarios_em_noticias': {},
-},
-{
-    'id': '2', 
-    'nome_usuario': 'rene',
-    'senha': '123',
-    'nome_completo': 'laires pereira soares',
-    'cpf': '433.941.708.41',
-    'noticias_publicadas': {},
-    'noticias_favoritas': {},
-    'noticias_compartilhaads': {},
-    'comentarios_em_noticias': {},
-}
-]
-
-"""
-ADMINISTRADOR
-{
-    id:
-    nome_usuario:
-    nome_completo
-    cpf:
-    noticias_publicadas: {}
-    noticias_favoritas: {}
-    noticias_compartilhaads: {}
-    comentarios_em_noticias: {}
-}
-
-USUARIO
-{
-    id:
-    nome_usuario:
-    senha: 
-    nome_completo
-    cpf:
-    noticias_favoritas: {}
-    noticias_compartilhaads: {}
-    comentarios_em_noticias: {}
-}
-"""
 tprint('breaking news', font='cybermedium') # desenho de boas-vindas
 tprint('catolica - pb', font='cybersmall')
 
 # o sistema irá rodar até alguém ou algo interromper o programa
-while login == False:
+while True:
     if(login):
+        if usuario_logado['isAdm']:
+            opcao_logado = input(text_colors.OKBLUE + '1 para acessar o menu ADM, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para fazer sair: ')
         # opcoes de usuario logado
-        # nesse momento não precisamos dessa opção
-        pass 
+        if(opcao_logado == '1'): 
+            menu_ADM(usuario_logado)
+        elif(opcao_logado == '2' or opcao_logado == '3'):
+            cadastrar = 'ADM' if opcao_logado == '2' else 'USUARIO'
+            dados_cadastro = fazer_cadastro(cadastrar)
+            if(cadastrar == 'ADM' and dados_cadastro): 
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
+            elif(cadastrar == 'USUARIO' and dados_cadastro):
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
+        elif opcao_logado == '0':
+            usuario_logado = {}
+            login = False
+            pass
+        
     else:
         opção_inicial = input(text_colors.OKBLUE + 'Digite 1 para Login, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para sair: ')
-
-        # autenticação do usuário (LOGIN)
-        # toda a parte de autenticacao fica na resposabilidade de login
-        # index vai apenas verificar quem logou e redirecionar para as paginas adqueadas
+        
         if(opção_inicial == '1'):
             tentar_logar = fazer_login(usuarios_cadastrados, adm_cadastrados) 
-            if (tentar_logar == 'adm_logado'):
-                menu_ADM()
+            if(tentar_logar == 'fail'):
+                print('erro')
+            elif (tentar_logar['isAdm']):
+                usuario_logado = tentar_logar
+                print(text_colors.OKGREEN + 'ADM LOGADO')
+                login = True
+                menu_ADM(usuario_logado)
             elif(tentar_logar == 'usuario_logado'):
                 print('CRIAR MENU USUARIO')
         # ------------------------------------------------------------------------------------------------------------
         # CADASTRAR
         elif(opção_inicial == '2' or opção_inicial == '3'):
             cadastrar = 'ADM' if opção_inicial == '2' else 'USUARIO'
-            dados_cadastro = fazer_cadastro(cadastrar, usuarios_cadastrados, adm_cadastrados)
+            dados_cadastro = fazer_cadastro(cadastrar)
             if(cadastrar == 'ADM' and dados_cadastro): 
-                adm_cadastrados.append(dados_cadastro)
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
             elif(cadastrar == 'USUARIO' and dados_cadastro):
-                usuarios_cadastrados.append(dados_cadastro)
+                atualizar_usuarios_cadastrados(cadastrar, dados_cadastro)
         # ------------------------------------------------------------------------------------------------------------
         elif(opção_inicial == '0'):
             break

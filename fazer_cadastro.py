@@ -1,9 +1,14 @@
 from warnin_colors import text_colors
 from getpass import getpass
+from lista_usuarios_cadastrados import ler_usuarios_cadastrados, ultimo_id_cadastrado
+
 # Para próxima etapa separar funçao de fazer 
 # cadastro da logica de validação de senha
 
-def fazer_cadastro(quem_cadastrar, usuarios_cadastrados, adms_cadastrados):
+usuarios_cadastrados = ler_usuarios_cadastrados('USUARIOS')
+adms_cadastrados = ler_usuarios_cadastrados('ADM')
+
+def fazer_cadastro(quem_cadastrar):
     while True:
         print(text_colors.OKGREEN + f'Fazendo Cadastro de {quem_cadastrar} ... \n')
         nome_usuario = input(text_colors.OKBLUE + 'Digite seu nome de usuário: ')
@@ -11,7 +16,11 @@ def fazer_cadastro(quem_cadastrar, usuarios_cadastrados, adms_cadastrados):
         senha = getpass(text_colors.OKBLUE + 'Digite sua senha: ')
         confirmacao_senha = getpass(text_colors.OKBLUE + 'Digite sua senha novamente: ')
 
+        isAdm = True if quem_cadastrar == 'ADM' else False
+        print(ultimo_id_cadastrado(quem_cadastrar))
+
         dados_cadastro = { # no final, nossa funcao devolverá essa lista para o programa principal
+            'id': ultimo_id_cadastrado(quem_cadastrar) + 1,
             'nome_usuario': nome_usuario,
             'senha': senha,
             'nome_completo': nome_completo,
@@ -20,14 +29,16 @@ def fazer_cadastro(quem_cadastrar, usuarios_cadastrados, adms_cadastrados):
             'noticias_favoritas': {},
             'noticias_compartilhaads': {},
             'comentarios_em_noticias': {},
+            'isAdm': isAdm
         }
 
 
         # senha e nome não podem ser string vazia
         if((dados_cadastro['senha'] == confirmacao_senha) and (dados_cadastro['senha'] != '') and dados_cadastro['nome_usuario'] != ''):
+            print(usuarios_cadastrados)
             for usuario in usuarios_cadastrados:
                 if(usuario['nome_usuario'] == dados_cadastro['nome_usuario']):
-                    print('Usuário já cadastrado')
+                    print(text_colors.FAIL + 'Usuário já cadastrado')
                     return
             for adms in adms_cadastrados:
                 if(adms['nome_usuario'] == dados_cadastro['nome_usuario']):
