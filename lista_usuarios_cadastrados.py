@@ -1,4 +1,3 @@
-# as listas de cadastro tem o formato [['nome', 'senha']]
 usuarios_cadastrados = [{
     'id': 1, 
     'nome_usuario': 'monique',

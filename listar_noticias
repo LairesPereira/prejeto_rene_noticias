@@ -1,0 +1,5 @@
+from noticias import listar_todas_noticias
+
+listar_todas_noticias()
+
+
