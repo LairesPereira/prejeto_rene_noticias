@@ -22,6 +22,7 @@ def visuzlizar_noticia(id):
             print('------------------------------*-----------------------------------')
             print(text_colors.BOLD + 'AUTOR: ' + noticia['autor'])
             print(text_colors.BOLD + noticia['data'])
+            print(text_colors.BOLD + 'Curtidas: ' + str(noticia['curtidas']))
             print('------------------------------*-----------------------------------')
     pass
 
@@ -36,7 +37,10 @@ def inserir_noticia_BD(nova_noticia):
     pass
 
 
-def curtir_noticia(id):
+def curtir_noticia(noticia_id):
+    for noticia in noticias:
+        if noticia['id'] == int(noticia_id):
+            noticia['curtidas'] += 1
     pass
 
 def comentar_noticia(id):
