@@ -5,6 +5,7 @@ from login import fazer_login
 from fazer_cadastro import fazer_cadastro
 from lista_usuarios_cadastrados import ler_usuarios_cadastrados, atualizar_usuarios_cadastrados
 from menu_ADM import menu_ADM
+from menu_usuario  import menu_USUARIO
 from art import *
 
 # controle para saber se o usuário está logado
@@ -23,11 +24,19 @@ tprint('catolica - pb', font='cybersmall')
 
 # o sistema irá rodar até alguém ou algo interromper o programa
 while True:
-    if(login):
+    if(login): # se houver alguem logado o programa exibe as opcoes de acordo com a categoria isAdm
         if usuario_logado['isAdm']:
             opcao_logado = input(text_colors.OKBLUE + '1 para acessar o menu ADM, 2 para cadastrar ADM, 3 para cadastrar usuário ou 0 para fazer sair: ')
+        
         # opcoes de usuario logado
-        if(opcao_logado == '1'): 
+        elif(usuario_logado['isAdm'] == False):
+            opcao_logado = input(text_colors.OKBLUE + '1 para acessar o menu, ou 0 para fazer sair: ')
+            if(opcao_logado == '1'):
+                menu_USUARIO(usuario_logado)
+            elif(opcao_logado == '0'):
+                break   
+        
+        if(opcao_logado == '1' and usuario_logado['isAdm'] == True): 
             menu_ADM(usuario_logado)
         elif(opcao_logado == '2' or opcao_logado == '3'):
             cadastrar = 'ADM' if opcao_logado == '2' else 'USUARIO'
@@ -53,8 +62,10 @@ while True:
                 print(text_colors.OKGREEN + 'ADM LOGADO')
                 login = True
                 menu_ADM(usuario_logado)
-            elif(tentar_logar == 'usuario_logado'):
-                print('CRIAR MENU USUARIO')
+            elif(tentar_logar['isAdm'] == False):
+                usuario_logado = tentar_logar
+                login = True
+                menu_USUARIO(usuario_logado)
         # ------------------------------------------------------------------------------------------------------------
         # CADASTRAR
         elif(opção_inicial == '2' or opção_inicial == '3'):

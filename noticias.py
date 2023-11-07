@@ -10,6 +10,7 @@ noticias = [{
     'comentários': {},
     'repostagens': {},
     'compartilhamentos_externos': 0,
+    
 }]
 
 def visuzlizar_noticia(id): 
@@ -34,8 +35,15 @@ def inserir_noticia_BD(nova_noticia):
     print(nova_noticia)
     pass
 
+
+def curtir_noticia(id):
+    pass
+
+def comentar_noticia(id):
+    pass
+
+
 def ultimo_id():
     if(len(noticias) == 0): 
         return 0
     return noticias[-1]['id']
-

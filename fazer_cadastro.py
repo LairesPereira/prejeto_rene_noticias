@@ -15,7 +15,7 @@ def fazer_cadastro(quem_cadastrar):
         nome_completo = input(text_colors.OKBLUE + 'Digite seu nome completo: ')
         senha = getpass(text_colors.OKBLUE + 'Digite sua senha: ')
         confirmacao_senha = getpass(text_colors.OKBLUE + 'Digite sua senha novamente: ')
-
+        
         isAdm = True if quem_cadastrar == 'ADM' else False
 
         dados_cadastro = { # no final, nossa funcao devolverá essa lista para o programa principal
@@ -23,14 +23,13 @@ def fazer_cadastro(quem_cadastrar):
             'nome_usuario': nome_usuario,
             'senha': senha,
             'nome_completo': nome_completo,
-            'cpf': '433.941.708.41',
+            'cpf': '',
             'noticias_publicadas': {},
             'noticias_favoritas': {},
             'noticias_compartilhaads': {},
             'comentarios_em_noticias': {},
             'isAdm': isAdm
         }
-
 
         # senha e nome não podem ser string vazia
         if((dados_cadastro['senha'] == confirmacao_senha) and (dados_cadastro['senha'] != '') and dados_cadastro['nome_usuario'] != ''):
@@ -47,7 +46,6 @@ def fazer_cadastro(quem_cadastrar):
             print(text_colors.FAIL + 'Dados inválidos!')
             return
         
-
         # Verificamos se o cadastro ja existe
         return dados_cadastro # return devolve para quem o chamou a nossa lista, agora com os dados. E encerra o loop.
   
