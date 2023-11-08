@@ -1,6 +1,6 @@
 from warnin_colors import text_colors
 from inserir_noticia import inserir_noticia
-from noticias import listar_todas_noticias, visuzlizar_noticia, curtir_noticia
+from noticias import listar_todas_noticias, visuzlizar_noticia, curtir_noticia, comentar_noticia
 
 def menu_USUARIO(usuario_logado):
     #  exibir opções que o usuario pode realizar
@@ -14,14 +14,19 @@ def menu_USUARIO(usuario_logado):
             listar_todas_noticias()
     elif opcao_menu_usuario == '2':
             listar_todas_noticias()
-            noticia_para_ler = input('Digite o numero da notiica que deseja ler ou 0 para sair: ')
-            if noticia_para_ler == '0':
+            noticia_escolhida = input('Digite o numero da notiica que deseja ler ou 0 para sair: ')
+            if noticia_escolhida == '0':
                 pass
             else:
-                visuzlizar_noticia(noticia_para_ler)
+                visuzlizar_noticia(noticia_escolhida)
                 acao_noticia = input('Digite 1 para curtir a notícia ou 2 para comentar a noticia: ')
                 if acao_noticia == '1':
-                    curtir_noticia(noticia_para_ler)
+                    curtir_noticia(noticia_escolhida)
+                elif acao_noticia == '2':
+                     comentario = input('Digite seu comentario: ')
+                     if comentario == '':
+                          pass
+                     comentar_noticia(noticia_escolhida, usuario_logado, comentario)
                 
                 # curtir_noticia = input('Digite o numero da notiica que deseja ler ou 0 para sair: ')
                 # comentar_noticia = input('Digite o numero da notiica que deseja ler ou 0 para sair: ')
