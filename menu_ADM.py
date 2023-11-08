@@ -1,6 +1,7 @@
 from warnin_colors import text_colors
 from inserir_noticia import inserir_noticia
-from noticias import listar_todas_noticias, visuzlizar_noticia, remover_noticia_BD, existem_noticias
+# from noticias import listar_todas_noticias, visuzlizar_noticia, remover_noticia_BD, existem_noticias
+from noticias import *
 
 def menu_ADM(usuario_logado):
     print(text_colors.OKCYAN + '1 - Inserir Noticia')
@@ -28,6 +29,13 @@ def menu_ADM(usuario_logado):
         else:
             noticia_para_ler = input('Digite o numero da notiica que deseja ler: ')
             visuzlizar_noticia(noticia_para_ler)
+            interacao = input('Digite 1 para curtir, 2 para comentar ou 0 para sair: ')
+            if interacao == '1':
+                 curtir_noticia(noticia_para_ler)
+            elif interacao == '2':
+                 comentario = input('Digite seu comentário: ')
+                 comentar_noticia(noticia_para_ler, usuario_logado, comentario)
+                 
     
     elif opcao_menu_adm == '3':
             listar_todas_noticias()
