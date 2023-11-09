@@ -30,6 +30,9 @@ def inserir_noticia_BD(nova_noticia):
     noticias.append(nova_noticia)
     pass
 
+def editar_noticia_BD(index, correcao):
+    ... 
+
 def remover_noticia_BD(noticia_id):
     for noticia in noticias:
         if noticia['id'] == int(noticia_id):

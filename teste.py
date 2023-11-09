@@ -1,5 +1,4 @@
-import shutil
+import time
 
-txt = "banana"
-
-print(txt.center(shutil.get_terminal_size().columns))
+timestamp = time.time()
+print(timestamp)

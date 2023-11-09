@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Sign up / Login Form</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Slide Navbar</title>
+	<link rel="stylesheet" type="text/css" href="slide navbar style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="main" id="main">  	
+	</div>
+</body>
+</html>
+<!-- partial -->
+<script>
+        const articles = JSON.parse('{{ articles|tojson|safe }}');
+        console.log(articles);
+
+        // Função para criar e adicionar elementos ao DOM
+        function renderArticles() {
+            var container = document.getElementById('main');
+
+            articles.forEach(function(article) {
+                var id = article[0];
+                var title = article[1];
+                var author = article[2];
+                var body = article[3];
+
+                // Criar elementos HTML
+                var titleLabel = document.createElement('label');
+                titleLabel.className = 'news-title';
+                titleLabel.textContent = title;
+
+                var bodyParagraph = document.createElement('p');
+                bodyParagraph.className = 'news-body news-content';
+                bodyParagraph.textContent = body;
+
+                var authorParagraph = document.createElement('p');
+                authorParagraph.className = 'news-body news-pub-date news-pub-author';
+                authorParagraph.textContent = 'Autor: ' + author;
+
+                // Adicionar elementos ao container
+                container.appendChild(titleLabel);
+                container.appendChild(bodyParagraph);
+                container.appendChild(authorParagraph);
+            });
+        }
+        // Chamar a função para renderizar os artigos
+        renderArticles();
+</script>
+  
+</body>
+</html>
