@@ -41,3 +41,4 @@ def inserir_noticia(usuario):
  
     
 
+print(ultimo_id())

@@ -12,7 +12,8 @@ noticias = [{
     'repostagens': {},
     'compartilhamentos_externos': 0,
     'removida': False
-}]
+}
+]
 
 def existem_noticias():
     for noticia in noticias:
