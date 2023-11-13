@@ -1,6 +1,5 @@
 # AUTORES MONIQUE E LAIRES
 from lista_usuarios_cadastrados import ler_usuarios_cadastrados
-import secrets
 from flask import *
 from flask_login import *
 from dao import *
@@ -22,8 +21,13 @@ def home():
 def login_page():
     return render_template('login_page.html')
     
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
+    if 'usuario' in session:
+        print(session['usuario'])
+        return render_template('adm_logado.html')
+    print(session['usuario'])
+    
     login = str(request.form.get('txt'))
     senha = str(request.form.get('pswd'))
 
@@ -92,7 +96,6 @@ def create_news():
 
         return render_template('create_news.html')
     else: 
-        print('aqui')
         return render_template('create_news.html')
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import psycopg2
-from datetime import datetime
+# from datetime import datetime
 from decouple import config
 
 def conectardb():
@@ -60,7 +60,6 @@ def create_user_db(name, password, email, conexao):
         conexao.close()
         return search_result
 
-
 def create_article_db(sql, conexao):
     cur = conexao.cursor()
 
@@ -103,10 +102,6 @@ def read_article_db(title, conexao):
 
 # con = conectardb()
 # create_user_db('laires', '123', 'lairesspsoares@gmail.com', con)
-
-
-
-
 
 # mock de noticias para inserir no DB
 noticias = [
