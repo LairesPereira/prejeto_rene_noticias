@@ -9,7 +9,7 @@ def menu_ADM(usuario_logado):
     print(text_colors.OKCYAN + '3 - Excluir Noticia')
     print(text_colors.OKCYAN + '4 - Editar Noticia')
     print(text_colors.OKCYAN + '5 - Buscar Noticia')
-    print(text_colors.OKCYAN + '6 - Sair Noticia')
+    print(text_colors.OKCYAN + '6 - Sair')
 
     opcao_menu_adm = input(text_colors.OKGREEN + 'Digite uma opção : ')
     if opcao_menu_adm == '1':
@@ -41,6 +41,19 @@ def menu_ADM(usuario_logado):
             listar_todas_noticias()
             noticia_para_deletar = input('Digite o numero da noticia que deseja deletar: ')
             remover_noticia_BD(noticia_para_deletar)
+    
+    elif opcao_menu_adm == '4':
+            listar_todas_noticias()
+            id_alterar = input('Digite a noticia que deseja alterar: ')
+            visuzlizar_noticia(id_alterar)
+            texto = input('Digite sua alteração: ')
+            editar_noticia(id_alterar, texto)
+    
+    elif opcao_menu_adm == '5':
+         listar_noticias_adm(usuario_logado)
+    
+    elif opcao_menu_adm == '6':
+         return
     pass
 
 

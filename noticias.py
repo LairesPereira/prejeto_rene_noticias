@@ -18,7 +18,7 @@ noticias = [{
 {
     'id': 2,
     'titulo': 'Noticia 2',
-    'autor': 'laires',
+    'autor': 'felipe',
     'data': '16/10/2023',
     'texto': 'O Rio registrou neste domingo (12) até as 14h uma temperatúra máxima de 40,4ºC. O registro foi feito às 14h, na estação da Vila Militar do Inmet, na Zona Oeste do Rio. Foi a maior temperatura do ano na cidade, segundo o Inmet. Também de acordo com o instituto, com os registros que deram entrada no sistema até 16h30, o Rio é a capital onde fez mais calor neste domingo. De acordo com o Centro de Operações da Prefeitura, fez ainda mais calor: 42,5ºC, na Estação Irajá. A prefeitura também registrou sensação térmica de 50,5°C em Irajá, às13h55. Ela não configurou, porém, recorde do ano, que foi registrado em fevereiro, com 58,3°C.',
     'curtidas': 1450,
@@ -136,3 +136,21 @@ def buscar_noticia(texto):
             print('Nenhuma Notícia encontrada')
     else:
         print('Não há notícias cadastradas. ')
+
+def editar_noticia(id, novo_texto):
+    if len(novo_texto) == 0 :
+        print('Alteração inválida!')
+
+    for noticia in noticias:
+        if noticia['id'] == int(id):
+            noticia['texto'] = novo_texto
+
+def listar_noticias_adm(usuario):
+    print(usuario)
+    listagem = []
+    for noticia in noticias:
+        if noticia['autor'] == usuario['nome_usuario']:
+            listagem.append(noticia['id'])
+    
+    for id in listagem:
+        visuzlizar_noticia(id)
