@@ -24,9 +24,10 @@ def inserir_noticia(usuario):
                 'data': data_formatada,
                 'texto': texto,
                 'curtidas': 0,
-                'comentários': {},
+                'comentarios': [],
                 'repostagens': {},
                 'compartilhamentos_externos': 0,
+                'removida': False
             }    
 
             inserir_noticia_BD(nova_noticia)

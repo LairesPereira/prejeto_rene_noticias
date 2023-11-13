@@ -30,7 +30,7 @@ while True:
         
         # opcoes de usuario logado
         elif(usuario_logado['isAdm'] == False):
-            opcao_logado = input(text_colors.OKBLUE + '1 para acessar o menu, ou 0 para fazer sair: ')
+            opcao_logado = input(text_colors.OKBLUE + '1 para acessar o menu, ou 0 para sair: ')
             if(opcao_logado == '1'):
                 menu_USUARIO(usuario_logado)
             elif(opcao_logado == '0'):

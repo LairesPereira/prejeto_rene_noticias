@@ -1,4 +1,5 @@
-from datetime import datetime
+import shutil
 
-print(datetime)
+txt = "banana"
 
+print(txt.center(shutil.get_terminal_size().columns))
