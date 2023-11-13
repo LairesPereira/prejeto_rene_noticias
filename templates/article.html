@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Católica Forum</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/article.css') }}">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Católica News - {{article[0][1]}}</title>
+	<link rel="stylesheet" type="text/css" href="slide navbar style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <button type="text" onclick="window.location.href = '/login'">Ver Notícias</button>
+        <button type="text">Sair</button>
+    </div>
+    <h1 class="catolica-news">{{article[0][1]}}</h1>
+    <div class="main" id="main">  	
+        <p class="news-body news-content full-article-content">{{article[0][3]}}</p>
+        <p class="news-body news-pub-date news-pub-author">{{article[0][2]}}</p>
+    </div>
+</body>
+</html>
+<script>
+</script>
+  
+</body>
+</html>

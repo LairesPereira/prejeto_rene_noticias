@@ -106,3 +106,45 @@ button:hover{
 	height: 100%;
 }
 
+.create-news-form {
+    margin: 3vh;
+	display: flex;
+	flex-direction: column;
+}
+
+input { 
+    margin: 10px auto;
+    background: #ddd;
+    font-family: inherit;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.field {
+    width: calc(100% - 20px);
+    max-width: 80vw;
+    margin-inline: auto;
+}
+  
+.field__ttl {
+    color: #747171;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.field__body {
+    margin-top: 15px;
+}
+
+textarea {
+    width: 95vh;
+    min-height: 200px;
+    border-radius: 5px;
+    background: #ddd;
+    padding: 15px;
+    font-size: 20px;
+    font-weight: 400;
+    font-family: inherit;
+    resize: vertical;
+}

@@ -9,6 +9,11 @@
 </head>
 <body>
 	<div class="main">  	
+		{% if sigun_up == False %}
+            <div class="error-message">
+                Usuario ou email já cadastrado
+            </div>
+        {% endif %}
 		
 		<input type="checkbox" id="chk" aria-hidden="true">
 
