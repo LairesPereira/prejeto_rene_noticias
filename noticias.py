@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 import emoji
 from warnin_colors import text_colors
 
@@ -12,7 +14,20 @@ noticias = [{
     'repostagens': {},
     'compartilhamentos_externos': 0,
     'removida': False
-}]
+},
+{
+    'id': 2,
+    'titulo': 'Noticia 2',
+    'autor': 'laires',
+    'data': '16/10/2023',
+    'texto': 'O Rio registrou neste domingo (12) até as 14h uma temperatúra máxima de 40,4ºC. O registro foi feito às 14h, na estação da Vila Militar do Inmet, na Zona Oeste do Rio. Foi a maior temperatura do ano na cidade, segundo o Inmet. Também de acordo com o instituto, com os registros que deram entrada no sistema até 16h30, o Rio é a capital onde fez mais calor neste domingo. De acordo com o Centro de Operações da Prefeitura, fez ainda mais calor: 42,5ºC, na Estação Irajá. A prefeitura também registrou sensação térmica de 50,5°C em Irajá, às13h55. Ela não configurou, porém, recorde do ano, que foi registrado em fevereiro, com 58,3°C.',
+    'curtidas': 1450,
+    'comentarios': [{'autor': 'laires', 'comentario': 'comentario 1'}, {'autor': 'felipe', 'comentario': 'comentario 2'}],
+    'repostagens': {},
+    'compartilhamentos_externos': 0,
+    'removida': False
+}
+]
 
 def existem_noticias():
     for noticia in noticias:
@@ -99,3 +114,25 @@ def visuzlizar_noticia(id):
             print('------------------------------*-----------------------------------')
     pass
 
+def buscar_noticia(texto): 
+    if len(texto) == 0:
+        print('Pesquisa Inválida')
+        return
+
+    resultado = []
+    texto_dividido = texto.split(' ') # separa a string que o usuario digitou em uma lista de palavras
+    matches = []
+
+    if existem_noticias():
+        for noticia in noticias:
+            for palavra in texto_dividido:
+                if palavra in noticia['texto']:
+                    matches.append(noticia['id'])
+
+        if len(matches):
+            for match in matches:
+                visuzlizar_noticia(match)
+        else:
+            print('Nenhuma Notícia encontrada')
+    else:
+        print('Não há notícias cadastradas. ')

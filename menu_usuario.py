@@ -1,12 +1,12 @@
 from warnin_colors import text_colors
 from inserir_noticia import inserir_noticia
-from noticias import listar_todas_noticias, visuzlizar_noticia, curtir_noticia, comentar_noticia
+from noticias import *
 
 def menu_USUARIO(usuario_logado):
     #  exibir opções que o usuario pode realizar
     print(text_colors.OKCYAN + '1 - Listar Noticia')
     print(text_colors.OKCYAN + '2 - Ler Noticias')
-    print(text_colors.OKCYAN + '3 - Curtir Noticia')
+    print(text_colors.OKCYAN + '3 - Buscar Noticia')
     print(text_colors.OKCYAN + '4 - Comentar Noticia')
 
     opcao_menu_usuario = input(text_colors.OKGREEN + 'Digite uma opção : ')
@@ -27,6 +27,10 @@ def menu_USUARIO(usuario_logado):
                      if comentario == '':
                           pass
                      comentar_noticia(noticia_escolhida, usuario_logado, comentario)
-                
+    elif opcao_menu_usuario == '3':
+        pesquisa_usuario = input('Digite o que deseja buscar: ')
+        buscar_noticia(pesquisa_usuario)
+
+         
                 # curtir_noticia = input('Digite o numero da notiica que deseja ler ou 0 para sair: ')
                 # comentar_noticia = input('Digite o numero da notiica que deseja ler ou 0 para sair: ')
