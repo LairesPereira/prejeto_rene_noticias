@@ -144,7 +144,7 @@ def inserir_mock():
     conexao = conectardb()
     for i in range(len(noticias)):
         print(i)
-        sql = f"insert into news_table values (2, '{titulos_noticias[i]}', 'laires', '{noticias[i]}', 232, false)"
+        sql = f"insert into news_table values ('1', '{titulos_noticias[i]}', 'laires', '{noticias[i]}', 232, false)"
         create_article_db(sql, conexao)
     conexao.close()
 

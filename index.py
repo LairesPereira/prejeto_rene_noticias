@@ -23,10 +23,11 @@ def login_page():
     
 @app.route("/login", methods=["POST", "GET"])
 def login():
+    print(session)
     if 'usuario' in session:
         print(session['usuario'])
         return render_template('adm_logado.html')
-    print(session['usuario'])
+
     
     login = str(request.form.get('txt'))
     senha = str(request.form.get('pswd'))
@@ -35,13 +36,16 @@ def login():
 
     sql = 'select * from usuario'
 
-    usuario = get_users(sql, conexao)
+    usuarios = get_users(sql, conexao)
 
-    for usuario in usuario:
-        if(login == usuario[1] and senha == usuario[2]):
+    for usuario in usuarios:
+        username, password, full_name, cpf, is_adm, email, user_id = usuario
+        print('aqui')
+        print(usuario)
+        if(login == username and senha == password):
             session['usuario'] = login
             print(session['usuario'], login)
-            if usuario[5]:
+            if is_adm:
                 return render_template('adm_logado.html', usuario=login)
             return render_template('usuario_logado.html', usuario=login)
         
