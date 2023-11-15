@@ -29,12 +29,12 @@
         // Função para criar e adicionar elementos ao DOM
         function renderArticles() {
             var container = document.getElementById('main');
-
+            
             articles.forEach(function(article) {
                 var id = article[0];
                 var title = article[1];
                 var author = article[2];
-                var body = article[3];
+                var body = article[5];
 
                 // Criar elementos HTML
                 var titleLabel = document.createElement('label');

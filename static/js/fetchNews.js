@@ -5,7 +5,8 @@ function renderNews(articles) {
 
     articles.forEach(function (article) {
         // Desestruturar os dados do artigo
-        let [id, title, author, body] = article;
+        console.log(article)
+        let [id, title, author, curtidas, removida, body] = article;
 
         // Criar um contêiner para cada notícia
         let newsContainer = document.createElement('div');

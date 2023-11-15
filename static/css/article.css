@@ -10,6 +10,7 @@ body{
 	background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 }
 .main{
+	padding: 20px;
     display: grid;
 	width: 75%;
 	height: 70vh;
@@ -116,10 +117,20 @@ button:hover{
 	border-radius: 5px;
     cursor: pointer;
 }
-/* 
-.news-content { 
-    height: 100vh;
-} */
+
+.news-info { 
+	width: 60%;
+	/* height: 20px; */
+	background: #e0dede;
+	justify-content: center;
+	display: flex;
+	margin: 10px auto;
+	padding: 2vh;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+    cursor: pointer;
+}
 
 .link-redirect-to-login {
     width: 60%;

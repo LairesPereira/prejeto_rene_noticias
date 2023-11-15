@@ -11,10 +11,11 @@ app.secret_key = config("SECRET_KEY")
 
 @app.route('/')
 def home():
+    print('aqui de novo')
     conexao = conectardb()
 
     home_articles = get_articles_db(conexao)
-
+    print(home_articles)
     return render_template('home.html', articles=home_articles)
 
 @app.route("/login_page")
@@ -74,8 +75,7 @@ def show_news_home():
     home_articles = get_articles_db(conexao)
 
     return jsonify(home_articles)
-
-    
+ 
 @app.route('/login/get_news/', methods=['GET'])
 def read_new():
     news_title = request.args.get('news')
@@ -88,19 +88,30 @@ def read_new():
 @app.route('/create_news', methods=['GET', 'POST'])
 def create_news():
     if request.method == 'POST':
-        print(request.form)
         titulo = str(request.form.get('titulo'))
         texto = str(request.form.get('textarea'))
         
         conexao = conectardb()
+        news_info = (titulo, session['usuario'], 0, False, texto)
 
-        sql = f"INSERT INTO news_table VALUES (1, '{titulo}', 'laires', '{texto}', 233, false )"
-
-        create_article_db(sql, conexao)
+        create_article_db(news_info, conexao)
 
         return render_template('create_news.html')
     else: 
         return render_template('create_news.html')
+
+@app.route('/logOut', methods=['GET'])
+def logout():
+    print(session['usuario'])
+    session.pop('usuario')
+
+    conexao = conectardb()
+
+    home_articles = get_articles_db(conexao)
+
+    return redirect('/')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
