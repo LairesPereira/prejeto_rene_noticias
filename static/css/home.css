@@ -74,9 +74,21 @@ button{
 button:hover{
 	background: #6d44b8;
 }
+
+.delete-button {
+	color: #000 ;
+	background-color: #ffffff;
+	width: auto;
+	padding: 10px;
+}
+
+.delete-button:hover {
+	background-color: #b84444;
+}
+
 .login{
 	height: 460px;
-	background: #eee;
+	background: #ffffff;
 	border-radius: 60% / 10%;
 	transform: translateY(-180px);
 	transition: .8s ease-in-out;

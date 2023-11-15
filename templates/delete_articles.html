@@ -21,8 +21,10 @@
 	</div>
 </body>
 <script>
-window.addEventListener("load", function() {
-    getAllNews()
+    const articles = JSON.parse('{{ articles|tojson|safe }}');
+        console.log(articles);
+    window.addEventListener("load", function() {
+    renderNews(articles, deleteButton = true)
 })
 </script>
 </html>

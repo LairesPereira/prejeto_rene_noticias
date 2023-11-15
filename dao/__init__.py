@@ -68,7 +68,7 @@ def create_article_db(noticias, conexao):
 
     # sql = "INSERT INTO usuario VALUES ('Rene', '123', 'Rene Gadelha', '123456', True, 'lairespsoares@gmai.com')"
 
-    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo}', 'Laires', '{curtidas}', '{removida}', '{corpo}')"
+    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo}', 'Rene', '{curtidas}', '{removida}', '{corpo}')"
     
     try:
         cur.execute(sql, (titulo, autor, curtidas, removida, corpo))
@@ -82,11 +82,27 @@ def create_article_db(noticias, conexao):
         conexao.commit()
     return sucess
 
+def get_user_articles(user):
+    print(user)
+    conexao = conectardb()
+    cur = conexao.cursor()
 
+    sql = f"SELECT * FROM noticia WHERE autor = '{user}' AND removida = false"
+
+    try:
+        cur.execute(sql)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        user_articles = cur.fetchall()
+        return user_articles
+    
+    conexao.close()
+    return
 
 def get_articles_db(conexao): 
     cur = conexao.cursor()
-    cur.execute('select * from noticia')
+    cur.execute('SELECT * FROM noticia WHERE removida = false')
     recset = cur.fetchall()
     conexao.close()
     return recset
@@ -107,6 +123,26 @@ def read_article_db(title, conexao):
     conexao.close()
     
     return article
+
+def delete_article_db(title, usuario):
+    print(title)
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    sql = f"UPDATE noticia SET removida = True WHERE titulo = '{title}' AND autor = '{usuario}'"
+    
+    sucess = False
+    try:
+        cur.execute(sql)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        sucess = True
+        conexao.commit()
+
+    conexao.close()
+    return sucess
+
 
 noticias = [
     'Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.',
@@ -147,7 +183,7 @@ titulos_noticias = [
 def inserir_mock():
     conexao = conectardb()
     for i in range(len(noticias)):
-        tupla = (titulos_noticias[i], 'laires', 232, False, noticias[i])
+        tupla = (titulos_noticias[i], 'Rene', 232, False, noticias[i])
         create_article_db(tupla, conexao)
     
     conexao.close()
@@ -184,3 +220,11 @@ def query_teste():
 
 # deletar_tudo()
 # inserir_mock()
+
+
+# querys uteis
+# -- select * from noticia
+# -- UPDATE noticia SET removida = False WHERE titulo = 'App Inovador';
+# SELECT * FROM noticia WHERE autor = 'Laires';
+# -- SELECT * FROM noticia WHERE titulo = 'Testeteste';
+# -- DELETE FROM noticia WHERE titulo = 'Testeteste';

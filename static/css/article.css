@@ -120,7 +120,7 @@ button:hover{
 
 .news-info { 
 	width: 60%;
-	/* height: 20px; */
+	height: 20px;
 	background: #e0dede;
 	justify-content: center;
 	display: flex;

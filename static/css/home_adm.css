@@ -13,7 +13,7 @@ body{
     display: flex;
     flex-direction: column;
 	width: 850px;
-	height: 430px;
+	height: 65vh;
 	background: red;
 	overflow: scroll;
 	background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
@@ -81,6 +81,16 @@ button:hover{
 	color: #fff;
 }
 
+.delete-button {
+	color: #000 ;
+	background-color: #ffffff;
+	width: auto;
+	padding: 10px;
+}
+
+.delete-button:hover {
+	background-color: #b84444;
+}
 
 .news-body {
     width: 60%;

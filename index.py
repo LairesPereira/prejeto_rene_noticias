@@ -111,7 +111,21 @@ def logout():
 
     return redirect('/')
 
+@app.route('/delete_news_page/delete/', methods=['GET'])
+def delete_news():
+    news_title = request.args.get('news')
+    delete = delete_article_db(news_title, session['usuario'])
 
+    if delete:
+        articles = get_user_articles(session['usuario'])
+        return redirect('/delete_news_page')
+
+@app.route('/delete_news_page', methods=['GET', 'DELETE'])
+def delete_news_page():
+    if 'usuario' in session:
+        articles = get_user_articles(session['usuario'])
+        return render_template('delete_articles.html', articles=articles)
+    redirect('/')
 
 if __name__ == "__main__":
     app.run(debug=True)
