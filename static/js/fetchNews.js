@@ -1,4 +1,4 @@
-function renderNews(articles) {
+function renderNews(articles, buttons) {
     console.log(articles)
     let container = document.getElementById('main');
 
@@ -63,20 +63,9 @@ function renderNews(articles) {
                 window.location.href = `update_news_page/?news=${title}`
             })
         }
-
-
         // Adicionar contêiner da notícia ao contêiner principal
         container.appendChild(newsContainer);
         newsContainer.appendChild(buttonsContainer)
-        
-        newsContainer.addEventListener('click', (e) => {
-            title = document.getElementById('news-title').innerHTML
-            console.log(title)
-            path = window.location.pathname
-            window.location.href = `/login/get_news/?news=${title}`
-        })
-       
-
     });
 }
 
