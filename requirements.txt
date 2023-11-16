@@ -9,3 +9,4 @@ MarkupSafe
 psycopg2-binary
 Werkzeug
 zipp
+gunicorn
