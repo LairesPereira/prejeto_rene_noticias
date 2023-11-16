@@ -140,18 +140,20 @@ def update_news():
         article = get_article(title, session['usuario'])
         return render_template('update_news_page.html', articles=article)
     
-@app.route('/update_news_page/send_update/')
+@app.route('/update_news_page/send_update/', methods=['POST'])
 def send_update():
     if 'usuario' in session:
-        old_title = request.args.get('old_title')
-        title = request.args.get('news')
-        content = request.args.get('content')
+        old_title = request.form.get('old_title')
+        title = request.form.get('news')
+        content = request.form.get('content')
+
+        print('AQUIIII', title)
 
         update = send_update_DB(session['usuario'], old_title, title, content)
         
         if update:
             articles = get_article(title, session['usuario'])
-            return render_template('user_news.html', articles=articles)
+            return redirect('user_news.html', articles=articles)
     
 
 if __name__ == "__main__":

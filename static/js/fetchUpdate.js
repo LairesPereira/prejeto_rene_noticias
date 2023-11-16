@@ -46,11 +46,37 @@ function fetchUpdate(articles, buttons) {
             buttonsContainer.appendChild(button);
 
             button.addEventListener('click', (e) => {
-                newTitle = document.getElementById('title-content').innerHTML
-                content = document.getElementById('body-content').innerHTML
-                console.log(e, title, content)
-                path = window.location.pathname
-                window.location.href = `send_update/?old_title=${title}&news=${newTitle}&content=${content}`
+                
+                const newTitle = document.getElementById('title-content').innerHTML;
+                const content = document.getElementById('body-content').innerHTML;
+
+                const data = new URLSearchParams();
+                data.append('old_title', title);
+                data.append('news', newTitle);
+                data.append('content', content);
+
+                fetch('send_update', {
+                    method: 'POST',
+                    body: data,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                })
+                .then(response => {
+                    // Lide com a resposta, se necessário
+                    console.log(response);
+                    window.location.href = '/user_news'
+                })
+                .catch(error => {
+                    // Lide com o erro, se necessário
+                    console.error('Erro ao enviar a solicitação:', error);
+                });
+
+                // newTitle = document.getElementById('title-content').innerHTML
+                // content = document.getElementById('body-content').innerHTML
+                // console.log(e, title, content)
+                // path = window.location.pathname
+                // window.location.href = `send_update/?old_title=${title}&news=${newTitle}&content=${content}`
             })
         }
 
