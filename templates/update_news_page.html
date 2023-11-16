@@ -6,7 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="slide navbar style.css">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home_adm.css') }}">
-    <script src="{{ url_for('static', filename='js/fetchNews.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create_news.css') }}">
+
+    <script src="{{ url_for('static', filename='js/fetchUpdate.js') }}"></script>
 </head>
 <body>
     <div class="header-adm">
@@ -21,9 +23,14 @@
 </body>
 <script>
     const articles = JSON.parse('{{ articles|tojson|safe }}');
-        console.log(articles);
+    console.log(articles);
+    const buttons = {
+        'deleteOption': false,
+        'updateOption': false,
+        'sendUpdate': true
+    }
     window.addEventListener("load", function() {
-    renderNews(articles, deleteButton = true)
+    fetchUpdate(articles, buttons)
 })
 </script>
 </html>

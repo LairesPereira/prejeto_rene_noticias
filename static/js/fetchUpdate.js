@@ -1,5 +1,5 @@
-function renderNews(articles) {
-    console.log(articles)
+function fetchUpdate(articles, buttons) {
+    console.log(articles, buttons)
     let container = document.getElementById('main');
 
     container.innerHTML = ''
@@ -18,51 +18,41 @@ function renderNews(articles) {
 
         // Criar elementos HTML para o título, corpo e autor
         let titleLabel = document.createElement('label');
-        titleLabel.className = 'news-title';
+        titleLabel.className = 'news-title update-body-content';
+        titleLabel.id = 'title-content'
         titleLabel.textContent = title;
+        titleLabel.contentEditable = true    
 
         let bodyParagraph = document.createElement('p');
-        bodyParagraph.className = 'news-body news-content';
+        bodyParagraph.className = 'news-body news-content update-body-content';
+        bodyParagraph.id = 'body-content'
         bodyParagraph.textContent = body;
+        bodyParagraph.contentEditable = true    
 
         let authorParagraph = document.createElement('p');
         authorParagraph.className = 'news-body news-pub-date news-pub-author';
         authorParagraph.textContent = 'Autor: ' + author;
 
-       
         // Adicionar elementos ao contêiner da notícia
         newsContainer.appendChild(titleLabel);
         newsContainer.appendChild(bodyParagraph);
-        newsContainer.appendChild(authorParagraph);            
+        newsContainer.appendChild(authorParagraph);     
         
-        if(buttons.deleteOption) {
+        if(buttons.sendUpdate) {
             let button = document.createElement('button');
-            button.className = 'delete-button';
-            button.id = 'delete-button'
-            button.textContent = 'Deletar';
-            buttonsContainer.appendChild(button);
-
-            button.addEventListener('click', (e) => {
-                console.log(title)
-                path = window.location.pathname
-                window.location.href = `delete_news_page/delete/?news=${title}`
-            })
-        }
-
-        if(buttons.updateOption) {
-            let button = document.createElement('button');
-            button.className = 'update-button';
+            button.className = 'update-button send-update';
             button.id = 'update-button'
             button.textContent = 'Atualizar';
             buttonsContainer.appendChild(button);
 
             button.addEventListener('click', (e) => {
-                console.log(title)
+                newTitle = document.getElementById('title-content').innerHTML
+                content = document.getElementById('body-content').innerHTML
+                console.log(e, title, content)
                 path = window.location.pathname
-                window.location.href = `update_news_page/?news=${title}`
+                window.location.href = `send_update/?old_title=${title}&news=${newTitle}&content=${content}`
             })
         }
-
 
         // Adicionar contêiner da notícia ao contêiner principal
         container.appendChild(newsContainer);
@@ -72,15 +62,5 @@ function renderNews(articles) {
     });
 }
 
-function getAllNews() {
-    fetch('/login/news')
-        .then(response => response.json())
-        .then(data => renderNews(
-            data, 
-            buttons = {
-            'deleteOption': false,
-            'updateOption': false,
-        }))
-        .catch(error => console.error('Erro:', error));
-}
+
 

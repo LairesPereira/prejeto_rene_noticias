@@ -124,8 +124,35 @@ def delete_news():
 def delete_news_page():
     if 'usuario' in session:
         articles = get_user_articles(session['usuario'])
-        return render_template('delete_articles.html', articles=articles)
-    redirect('/')
+        return render_template('user_news.html', articles=articles)
+
+@app.route('/user_news')
+def update_news_page():
+    if 'usuario' in session:
+        articles = get_user_articles(session['usuario'])
+        return render_template('user_news.html', articles=articles)
+
+@app.route('/update_news_page/', methods=['GET'])
+def update_news(): 
+    if 'usuario' in session:
+        title = request.args.get('news')
+
+        article = get_article(title, session['usuario'])
+        return render_template('update_news_page.html', articles=article)
+    
+@app.route('/update_news_page/send_update/')
+def send_update():
+    if 'usuario' in session:
+        old_title = request.args.get('old_title')
+        title = request.args.get('news')
+        content = request.args.get('content')
+
+        update = send_update_DB(session['usuario'], old_title, title, content)
+        
+        if update:
+            articles = get_article(title, session['usuario'])
+            return render_template('user_news.html', articles=articles)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)

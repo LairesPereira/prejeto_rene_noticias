@@ -148,3 +148,7 @@ textarea {
     font-family: inherit;
     resize: vertical;
 }
+
+.update-body-content { 
+	cursor: auto;
+}

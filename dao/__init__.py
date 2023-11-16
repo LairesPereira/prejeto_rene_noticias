@@ -107,6 +107,25 @@ def get_articles_db(conexao):
     conexao.close()
     return recset
 
+def get_article(title, user):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    sql = f"SELECT * FROM noticia WHERE titulo = '{title}' and autor = '{user}'"
+
+    article =[]
+    try:
+        cur.execute(sql)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        article = cur.fetchall()
+        conexao.close()
+        return article
+
+    conexao.close()
+    return 
+
 def read_article_db(title, conexao):
     cur = conexao.cursor()
 
@@ -215,6 +234,22 @@ def query_teste():
         conexao.commit()
         conexao.close()
     return 
+
+def send_update_DB(usuario, old_title, news_title, content):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    sql = f"UPDATE noticia SET titulo = '{news_title}', corpo = '{content}' WHERE autor = '{usuario}' and titulo = '{old_title}'"
+    print(sql)
+    try:
+        cur.execute(sql)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        conexao.commit()
+        conexao.close()
+        return True
+    return False
 
 # query_teste()
 
