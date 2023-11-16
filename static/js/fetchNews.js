@@ -19,6 +19,7 @@ function renderNews(articles) {
         // Criar elementos HTML para o título, corpo e autor
         let titleLabel = document.createElement('label');
         titleLabel.className = 'news-title';
+        titleLabel.id = 'news-title';
         titleLabel.textContent = title;
 
         let bodyParagraph = document.createElement('p');
@@ -67,6 +68,13 @@ function renderNews(articles) {
         // Adicionar contêiner da notícia ao contêiner principal
         container.appendChild(newsContainer);
         newsContainer.appendChild(buttonsContainer)
+        
+        newsContainer.addEventListener('click', (e) => {
+            title = document.getElementById('news-title').innerHTML
+            console.log(title)
+            path = window.location.pathname
+            window.location.href = `/login/get_news/?news=${title}`
+        })
        
 
     });
