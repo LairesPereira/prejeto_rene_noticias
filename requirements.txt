@@ -7,6 +7,4 @@ itsdangerous
 Jinja2
 MarkupSafe
 psycopg2-binary
-zipp
-guinicorn
 python-decouple
