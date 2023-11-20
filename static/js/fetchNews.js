@@ -1,12 +1,10 @@
 function renderNews(articles, buttons) {
-    console.log(articles)
     let container = document.getElementById('main');
 
     container.innerHTML = ''
 
     articles.forEach(function (article) {
         // Desestruturar os dados do artigo
-        console.log(article)
         let [id, title, author, curtidas, removida, body] = article;
 
         // Criar um contêiner para cada notícia
@@ -19,7 +17,7 @@ function renderNews(articles, buttons) {
         // Criar elementos HTML para o título, corpo e autor
         let titleLabel = document.createElement('label');
         titleLabel.className = 'news-title';
-        titleLabel.id = 'news-title';
+        titleLabel.id = `${title}`;
         titleLabel.textContent = title;
 
         let bodyParagraph = document.createElement('p');
@@ -30,12 +28,12 @@ function renderNews(articles, buttons) {
         authorParagraph.className = 'news-body news-pub-date news-pub-author';
         authorParagraph.textContent = 'Autor: ' + author;
 
-       
         // Adicionar elementos ao contêiner da notícia
         newsContainer.appendChild(titleLabel);
         newsContainer.appendChild(bodyParagraph);
         newsContainer.appendChild(authorParagraph);            
         
+
         if(buttons.deleteOption) {
             let button = document.createElement('button');
             button.className = 'delete-button';
@@ -44,7 +42,6 @@ function renderNews(articles, buttons) {
             buttonsContainer.appendChild(button);
 
             button.addEventListener('click', (e) => {
-                console.log(title)
                 path = window.location.pathname
                 window.location.href = `delete_news_page/delete/?news=${title}`
             })
@@ -58,14 +55,22 @@ function renderNews(articles, buttons) {
             buttonsContainer.appendChild(button);
 
             button.addEventListener('click', (e) => {
-                console.log(title)
                 path = window.location.pathname
                 window.location.href = `update_news_page/?news=${title}`
             })
         }
+
         // Adicionar contêiner da notícia ao contêiner principal
         container.appendChild(newsContainer);
         newsContainer.appendChild(buttonsContainer)
+
+        if(buttons.deleteOption == false && buttons.updateOption == false) {
+            newsContainer.addEventListener('click', (e) => {
+                newstitle = document.getElementById(`${title}`).innerHTML;
+                path = window.location.pathname
+                window.location.href = `/login/get_news/?news=${newstitle}`
+            })
+        }
     });
 }
 
