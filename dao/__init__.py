@@ -68,7 +68,7 @@ def create_article_db(noticias, conexao):
 
     # sql = "INSERT INTO usuario VALUES ('Rene', '123', 'Rene Gadelha', '123456', True, 'lairespsoares@gmai.com')"
 
-    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo}', 'Rene', '{curtidas}', '{removida}', '{corpo}')"
+    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo}', '{autor}', '{curtidas}', '{removida}', '{corpo}')"
     
     try:
         cur.execute(sql, (titulo, autor, curtidas, removida, corpo))

@@ -1,5 +1,4 @@
 # AUTORES MONIQUE E LAIRES
-from lista_usuarios_cadastrados import ler_usuarios_cadastrados
 from flask import *
 from flask_login import *
 from dao import *
