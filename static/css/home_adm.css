@@ -130,3 +130,7 @@ button:hover{
 	margin: 0;
 }
 
+.full-article-content {
+	height: auto;
+	overflow: auto;
+}
