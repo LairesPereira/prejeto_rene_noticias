@@ -61,15 +61,14 @@ def create_user_db(name, password, email, conexao):
         return search_result
 
 def create_article_db(noticias, conexao):
-
     cur = conexao.cursor()
 
     titulo, autor, curtidas, removida, corpo = noticias
 
     # sql = "INSERT INTO usuario VALUES ('Rene', '123', 'Rene Gadelha', '123456', True, 'lairespsoares@gmai.com')"
 
-    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo}', '{autor}', '{curtidas}', '{removida}', '{corpo}')"
-    
+    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}')"
+    print(sql)
     try:
         cur.execute(sql, (titulo, autor, curtidas, removida, corpo))
         sucess = True
@@ -116,31 +115,37 @@ def get_article(title, user):
     article =[]
     try:
         cur.execute(sql)
+
     except psycopg2.IntegrityError:
         conexao.rollback()
+        print('rollback')
     else:
         article = cur.fetchall()
         conexao.close()
+        print('TAMO AQUIIII')
         return article
 
     conexao.close()
     return 
 
-def read_article_db(title, conexao):
+def read_article_db(title):
+    conexao = conectardb()
     cur = conexao.cursor()
 
-    sql = f"SELECT * FROM noticia WHERE  titulo = '{title}' "
+    sql = f"SELECT * FROM noticia WHERE titulo = '{title}' "
 
     try:
+        print(sql)
         cur.execute(sql)
-        article = cur.fetchall()
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
-        conexao.commit()
+        article = cur.fetchall()
+        conexao.close()
+        print('articleeee', article)
+        return article
     
     conexao.close()
-    
     return article
 
 def delete_article_db(title, usuario):
@@ -222,7 +227,7 @@ def deletar_tudo():
 def query_teste():
     conexao = conectardb()
     cur = conexao.cursor()
-    sql = 'SELECT * FROM noticia'
+    sql = "SELECT * FROM noticia WHERE titulo = 'Testando novamente '"
 
     try:
         cur.execute(sql)
@@ -240,7 +245,6 @@ def send_update_DB(usuario, old_title, news_title, content):
     cur = conexao.cursor()
 
     sql = f"UPDATE noticia SET titulo = '{news_title}', corpo = '{content}' WHERE autor = '{usuario}' and titulo = '{old_title}'"
-    print(sql)
     try:
         cur.execute(sql)
     except psycopg2.IntegrityError:

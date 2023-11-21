@@ -3,6 +3,7 @@ from flask import *
 from flask_login import *
 from dao import *
 from decouple import config 
+from warnin_colors import text_colors
 
 
 app = Flask(__name__)
@@ -78,9 +79,8 @@ def show_news_home():
 @app.route('/login/get_news/', methods=['GET'])
 def read_new():
     news_title = request.args.get('news')
-    
-    conexao = conectardb()
-    article = read_article_db(news_title, conexao)
+    print(text_colors.FAIL + 'AQUI', news_title)
+    article = read_article_db(news_title)
     print(article)
     return render_template('article.html', article=article)
 

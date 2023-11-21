@@ -68,6 +68,7 @@ function renderNews(articles, buttons) {
             newsContainer.addEventListener('click', (e) => {
                 newstitle = document.getElementById(`${title}`).innerHTML;
                 path = window.location.pathname
+                console.log(`/login/get_news/?news=${newstitle}`)
                 window.location.href = `/login/get_news/?news=${newstitle}`
             })
         }
