@@ -1,0 +1,84 @@
+<div class="user-card">
+  <span class="avatar-holder">
+    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY0Mzk4NjU1Mw&ixlib=rb-1.2.1&q=80&w=200" alt="Avatar">
+  </span>
+  <span class="user-info-holder">
+    <h2 class="name">{{article[2]}}</h2>
+    <span class="skill">{{article[1]}}</span>
+
+    <div class="evaluations">
+      <span class="stars evaluation">
+        <span class="star-icon evaluation-icon">
+          <svg id="{{article[1]}}" card-like-heart="{{article[1]}}" width="800px" height="800px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <path data-article-title="{{ article[1] }}" class="heart-svg" fill="#000000" d="M11.434 1a4.604 4.604 0 00-3.226 1.322L8 2.527l-.208-.205A4.589 4.589 0 004.566 1 4.589 4.589 0 001.34 2.322 4.5 4.5 0 000 5.522a4.5 4.5 0 001.34 3.2l6.133 6.061a.75.75 0 001.054 0l6.132-6.06a4.52 4.52 0 00.992-1.467 4.482 4.482 0 00-.992-4.934A4.604 4.604 0 0011.433 1z"/>
+          </svg>  
+        </span>
+        <span class="star-text evaluation-text">{{article[3]}}</span>
+      </span>
+
+      <span class="reviews evaluation">
+        <span class="reviews-icon evaluation-icon">
+          <svg fill="#1C2B62" height="800px" width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 473 473" xml:space="preserve">
+            <g>
+              <g>
+                <path d="M403.581,69.3c-44.7-44.7-104-69.3-167.2-69.3s-122.5,24.6-167.2,69.3c-86.4,86.4-92.4,224.7-14.9,318
+                  c-7.6,15.3-19.8,33.1-37.9,42c-8.7,4.3-13.6,13.6-12.1,23.2s8.9,17.1,18.5,18.6c4.5,0.7,10.9,1.4,18.7,1.4
+                  c20.9,0,51.7-4.9,83.2-27.6c35.1,18.9,73.5,28.1,111.6,28.1c61.2,0,121.8-23.7,167.4-69.3c44.7-44.7,69.3-104,69.3-167.2
+                  S448.281,114,403.581,69.3z M384.481,384.6c-67.5,67.5-172,80.9-254.2,32.6c-5.4-3.2-12.1-2.2-16.4,2.1c-0.4,0.2-0.8,0.5-1.1,0.8
+                  c-27.1,21-53.7,25.4-71.3,25.4h-0.1c20.3-14.8,33.1-36.8,40.6-53.9c1.2-2.9,1.4-5.9,0.7-8.7c-0.3-2.7-1.4-5.4-3.3-7.6
+                  c-73.2-82.7-69.4-208.7,8.8-286.9c81.7-81.7,214.6-81.7,296.2,0C466.181,170.1,466.181,302.9,384.481,384.6z"/>
+                <circle cx="236.381" cy="236.5" r="16.6"/>
+                <circle cx="321.981" cy="236.5" r="16.6"/>
+                <circle cx="150.781" cy="236.5" r="16.6"/>
+              </g>
+            </g>
+          </svg>
+        </span>
+        <span class="reviews-text evaluation-text">4,447</span>
+      </span>
+
+      <span class="student evaluation">
+        <span class="student-icon evaluation-icon">
+          <svg fill="#1C2B62" height="800px" width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 481.6 481.6" xml:space="preserve">
+            <g>
+              <path d="M381.6,309.4c-27.7,0-52.4,13.2-68.2,33.6l-132.3-73.9c3.1-8.9,4.8-18.5,4.8-28.4c0-10-1.7-19.5-4.9-28.5l132.2-73.8
+                c15.7,20.5,40.5,33.8,68.3,33.8c47.4,0,86.1-38.6,86.1-86.1S429,0,381.5,0s-86.1,38.6-86.1,86.1c0,10,1.7,19.6,4.9,28.5
+                l-132.1,73.8c-15.7-20.6-40.5-33.8-68.3-33.8c-47.4,0-86.1,38.6-86.1,86.1s38.7,86.1,86.2,86.1c27.8,0,52.6-13.3,68.4-33.9
+                l132.2,73.9c-3.2,9-5,18.7-5,28.7c0,47.4,38.6,86.1,86.1,86.1s86.1-38.6,86.1-86.1S429.1,309.4,381.6,309.4z M381.6,27.1
+                c32.6,0,59.1,26.5,59.1,59.1s-26.5,59.1-59.1,59.1s-59.1-26.5-59.1-59.1S349.1,27.1,381.6,27.1z M100,299.8
+                c-32.6,0-59.1-26.5-59.1-59.1s26.5-59.1,59.1-59.1s59.1,26.5,59.1,59.1S132.5,299.8,100,299.8z M381.6,454.5
+                c-32.6,0-59.1-26.5-59.1-59.1c0-32.6,26.5-59.1,59.1-59.1s59.1,26.5,59.1,59.1C440.7,428,414.2,454.5,381.6,454.5z"/>
+            </g>
+          </svg>
+        </span>
+        <span class="student-text evaluation-text">478</span>
+      </span>
+    </div>
+
+    {% if full_article %}
+      <span class="desc">
+        <p>{{article[5]}}</p>
+      </span>
+    {% else %}
+      <span class="desc">
+        <p>{{article[5][:200] ~ '...'}}</p>
+      </span>
+    {% endif %}
+
+    {% if show_more_btn %}
+      <span class="button">
+        <button class="show-more-btn show-more-button" id="show-more-button" data-article-title="{{ article[1] }}">Ver mais</button>
+      </span>
+    {% endif %}
+
+    {% if update_delete %}
+      <div class="update_delete_btns">
+        <span class="button">
+          <button class="show-more-btn delete-news-button" id="delete-news-button" data-article-title="{{ article[1] }}">Deletar</button>
+        </span><span class="button">
+          <button class="show-more-btn update-news-button" id="update-news-button" data-article-title="{{ article[1] }}">Atualizar</button>
+        </span>
+      </div>
+    {% endif %}
+</div>
+

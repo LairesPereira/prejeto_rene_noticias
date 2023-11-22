@@ -10,10 +10,11 @@ body{
 	background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 }
 .main{
+	margin-top: 10%;
     display: flex;
     flex-direction: column;
 	width: 850px;
-	height: 65vh;
+	height: 100%;
 	background: red;
 	overflow: scroll;
 	background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
@@ -107,15 +108,17 @@ button:hover{
 	background: #e0dede;
 	justify-content: center;
 	display: flex;
-	margin: 20px auto;
+	margin: 0px auto;
 	padding: 10px;
 	border: none;
 	outline: none;
-	border-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
     cursor: pointer;
 }
 
 .news-content { 
+	max-height: 350px;
     height: 30%;
     overflow: hidden;
     cursor: pointer;
@@ -134,3 +137,43 @@ button:hover{
 	height: auto;
 	overflow: auto;
 }
+
+.news-pub-author {
+	border-top-left-radius: 0px ;
+	border-top-right-radius: 0px;
+	margin: 0px auto;
+}
+
+.general-info {
+	height: auto;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+
+
+.large-font{
+	font-size:xxx-large;
+  }
+  .top-20{
+	position:relative;
+	top:20vh;
+  }
+  ion-icon.active{
+	animation:like 0.5s 1;
+	fill:red;
+	stroke:none;
+  }
+  ion-icon{
+	fill:transparent;
+	stroke:black;
+	stroke-width:30;
+	transition:all 0.5s;
+  }
+  
+  
+  @-webkit-keyframes like {
+	0%   { transform: scale(1); }
+	90%   { transform: scale(1.2); }
+	100% { transform: scale(1.1); }
+  }

@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+.user-card {
+    max-width: 31.25rem;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    gap: 1rem;
+    box-shadow: 0px 0px 10px #80808080;
+    margin: 2rem auto;
+    width: 100rem;
+  }
+  
+  .avatar-holder img {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    background: #e6effa;
+    padding: 0.5rem;
+    /* position: relative; */
+    display: block;
+    object-fit: cover;
+  }
+  
+  .user-info-holder {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .name {
+    font-size: 1.625rem;
+    color: #1c2b62;
+    font-weight: bold;
+    font-family: "Merriweather", sans-serif;
+  }
+  
+  .skill {
+    font-size: 1rem;
+    color: #1c2b62;
+  }
+  
+  .evaluations {
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: #1c2b62;
+  }
+  
+  .evaluation {
+    margin-bottom: -0.5rem;
+  }
+
+  .evaluation-icon svg {
+    width: 1.5rem;
+    height: 2rem;
+    vertical-align: middle;
+  }
+  
+  .desc {
+    color: #1c2b62;
+    font-weight: 300;
+  }
+  
+  .show-more-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid #1c2b62;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #621c1c;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.25s ease 0s;
+    width: auto;
+    margin-left: 0px;
+  }
+  
+  .show-more-btn:hover,
+  .show-more-btn:focus {
+    background: #1c2b62;
+    color: #fff;
+  }
+
+.update_delete_btns {
+  display: flex;
+}
+  
+
+#heart-svg {
+  cursor: pointer;
+  overflow: visible;
+  width: 60px;
+  margin-left: -1.1rem;
+  margin-right: -1.1rem;
+  height: 2.7rem;
+}
+
+svg #heart {
+  transform-origin: center;
+  animation: animateHeartOut .3s linear forwards;
+}
+
+svg #main-circ {
+  transform-origin: 29.5px 29.5px;
+}
+
+.checkbox {
+  display: none;
+}

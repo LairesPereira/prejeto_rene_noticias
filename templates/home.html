@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Católica Forum</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="vbattalshn" data-description="Support me on Buy me a coffee!" data-message="" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -17,46 +19,11 @@
 <body>
   <h1 class="catolica-news">Católica News</h1>
 	<div class="main" id="main" onclick="window.location.href = '/login_page'">  	
+    {% for article in articles  %}
+      {% include 'card.html' %}
+    {% endfor %}
 	</div>
 </body>
 </html>
-<!-- partial -->
-<script>
-        const articles = JSON.parse('{{ articles|tojson|safe }}');
-        console.log(articles);
-
-        // Função para criar e adicionar elementos ao DOM
-        function renderArticles() {
-            var container = document.getElementById('main');
-            
-            articles.forEach(function(article) {
-                var id = article[0];
-                var title = article[1];
-                var author = article[2];
-                var body = article[5];
-
-                // Criar elementos HTML
-                var titleLabel = document.createElement('label');
-                titleLabel.className = 'news-title';
-                titleLabel.textContent = title;
-
-                var bodyParagraph = document.createElement('p');
-                bodyParagraph.className = 'news-body news-content';
-                bodyParagraph.textContent = body;
-
-                var authorParagraph = document.createElement('p');
-                authorParagraph.className = 'news-body news-pub-date news-pub-author';
-                authorParagraph.textContent = 'Autor: ' + author;
-
-                // Adicionar elementos ao container
-                container.appendChild(titleLabel);
-                container.appendChild(bodyParagraph);
-                container.appendChild(authorParagraph);
-            });
-        }
-        // Chamar a função para renderizar os artigos
-        renderArticles();
-</script>
-  
 </body>
 </html>

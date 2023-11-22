@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home_adm.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create_news.css') }}">
 
-    <script src="{{ url_for('static', filename='js/fetchUpdate.js') }}"></script>
 </head>
 <body>
     <div class="header-adm">
@@ -19,19 +18,53 @@
         <button type="text" onclick="window.location.href = '/logOut'" >Sair</button>
     </div>
 	<div class="main" id="main">  	
+        <div class="">
+            <div class="login">
+                    <div class="field">
+                        <div class="field__head">
+                          <input class="field__ttl" name="titulo" id="title-content" value="{{article[1]}}" for="textarea" required></input>
+                        </div>
+                        <div class="field__body">
+                          <div class="textarea-box">
+                            <textarea name="textarea" name="txt" id="textarea" required>{{article[5]}}</textarea>
+                          </div>
+                        </div>
+                      </div>
+					<button id="update-button" onclick="update('{{article[1]}}')">Atualizar</button>
+			</div>
 	</div>
 </body>
-<script>
-    const articles = JSON.parse('{{ articles|tojson|safe }}');
-    console.log(articles);
-    const buttons = {
-        'deleteOption': false,
-        'updateOption': false,
-        'sendUpdate': true
+<script>    
+    function update(oldTitle) {
+        const newTitle = document.getElementById('title-content').value;
+        const content = document.getElementById('textarea').value;
+        console.log(oldTitle, newTitle, content)
+
+
+        const data = new URLSearchParams();
+                data.append('old_title', oldTitle);
+                data.append('news', newTitle);
+                data.append('content', content);
+
+                fetch('send_update', {
+                    method: 'POST',
+                    body: data,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                })
+                .then(response => {
+                    // Lide com a resposta, se necessário
+                    console.log(response);
+                    window.location.href = '/user_news'
+                })
+                .catch(error => {
+                    // Lide com o erro, se necessário
+                    console.error('Erro ao enviar a solicitação:', error);
+                });
+
+
     }
-    window.addEventListener("load", function() {
-    fetchUpdate(articles, buttons)
-})
 </script>
 </html>
 </body>

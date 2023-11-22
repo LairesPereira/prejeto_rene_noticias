@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Católica Forum</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/article.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -25,9 +27,7 @@
     </div>
     <h1 class="catolica-news">{{article[0][1]}}</h1>
     <div class="main" id="main">  	
-        <p class="news-body news-content full-article-content">{{article[0][5]}}</p>
-        <p class="news-info">{{article[0][2]}}</p>
-        <p class="news-info news-interactions">Curtidas: 1</p>
+        {% include "card.html" %}
     </div>
 </body>
 </html>
