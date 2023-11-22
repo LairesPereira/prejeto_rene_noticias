@@ -11,8 +11,7 @@ app.secret_key = config("SECRET_KEY")
 
 @app.route('/')
 def home():
-    conexao = conectardb()
-    home_articles = get_articles_db(conexao)
+    home_articles = get_articles_db()
     return render_template('home.html', articles=home_articles)
 
 @app.route("/login_page")
@@ -21,8 +20,7 @@ def login_page():
     
 @app.route("/login", methods=["POST", "GET"])
 def login():
-    conexao = conectardb()
-    home_articles = get_articles_db(conexao)
+    home_articles = get_articles_db()
     if 'usuario' in session:
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
 
@@ -65,9 +63,7 @@ def create_user():
 
 @app.route('/login/news')
 def show_news_home():
-    conexao = conectardb()
-
-    home_articles = get_articles_db(conexao)
+    home_articles = get_articles_db()
 
     return jsonify(home_articles)
  
@@ -95,11 +91,6 @@ def create_news():
 @app.route('/logOut', methods=['GET'])
 def logout():
     session.pop('usuario')
-
-    conexao = conectardb()
-
-    home_articles = get_articles_db(conexao)
-
     return redirect('/')
 
 @app.route('/delete_news_page/delete/', methods=['GET'])
@@ -151,9 +142,8 @@ def send_like():
         title = request.form.get('title')
         like = request.form.get('like')
         print(text_colors.FAIL + 'AQUI', title)
-        conexao = conectardb()
         like_insert = like_count_DB(title, like)
-        home_articles = get_articles_db(conexao)
+        home_articles = get_articles_db()
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
 
 

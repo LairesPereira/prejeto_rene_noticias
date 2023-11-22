@@ -99,12 +99,20 @@ def get_user_articles(user):
     conexao.close()
     return
 
-def get_articles_db(conexao): 
+def get_articles_db(): 
+    conexao = conectardb()
     cur = conexao.cursor()
-    cur.execute('SELECT * FROM noticia WHERE removida = false')
-    recset = cur.fetchall()
-    conexao.close()
-    return recset
+    
+    sql = "SELECT * FROM noticia WHERE removida = false"
+    sql = "SELECT * FROM noticia WHERE removida = false ORDER BY curtidas DESC"
+    try: 
+        cur.execute(sql)
+    except psycopg2.IntegrityError:
+        cur.rollback()        
+    else:
+        articles = cur.fetchall()
+        conexao.close()
+    return articles
 
 def get_article(title, user):
     conexao = conectardb()
