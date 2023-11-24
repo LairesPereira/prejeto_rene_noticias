@@ -32,6 +32,96 @@
 </body>
 </html>
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const hearts = document.querySelectorAll('.heart-svg')
+    const submitButtons = document.querySelectorAll('.submit-comment')
+
+    submitButtons.forEach(function (btn) {
+      const articleId = btn.getAttribute('data-article-title')
+      btn.addEventListener('click', function(e) {
+        e.preventDefault()
+        
+        comment = document.getElementById('comment-text-area').value
+        console.log(comment)
+
+        if(comment) {
+          path = window.location.origin + '/submit_comment'
+            
+          const data = new URLSearchParams();
+          data.append('comment', comment)
+          data.append('title', articleId)
+
+          
+          fetch(path, {
+              method: 'POST',
+              body: data,
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+          })
+          .then(response => {
+              // Lide com a resposta, se necessário
+              console.log(response);
+              // window.location.href = '/login'
+          })
+          .catch(error => {
+              // Lide com o erro, se necessário
+              console.error('Erro ao enviar a solicitação:', error);
+          });
+         
+        }
+    })
+})
+
+    hearts.forEach(function (card) {
+        const articleId = card.getAttribute('data-article-title');
+        console.log(articleId)
+
+        // Initial color
+        let like = false
+        let currentColor = '#000000';
+        card.addEventListener('click', function() { 
+
+            currentColor = (currentColor === '#000000') ? '#e12929' : '#000000';
+            like = (like === false) ? true : false;
+
+            likesCounter = parseInt(document.getElementById(`${articleId}-total-likes`).innerHTML)
+
+            if(like) {
+                document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter + 1
+            } else {
+                document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter - 1
+            }
+
+            // Apply the new color
+            card.setAttribute("fill", currentColor)
+            
+            const data = new URLSearchParams();
+            data.append('like', like.toString())
+            data.append('title', articleId)
+
+            path = window.location.origin + `/send_like`
+                
+            fetch(path, {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then(response => {
+                // Lide com a resposta, se necessário
+                console.log(response);
+                // window.location.href = '/login'
+            })
+            .catch(error => {
+                // Lide com o erro, se necessário
+                console.error('Erro ao enviar a solicitação:', error);
+            });
+
+        })
+    })
+  })
 </script>
   
 </body>

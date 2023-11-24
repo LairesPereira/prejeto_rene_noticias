@@ -118,3 +118,32 @@ svg #main-circ {
 .checkbox {
   display: none;
 }
+
+/* COMENTÁRIOS EM POSTS */
+textarea-comment {  
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+
+  padding: 10px;
+  max-width: 300px;
+  width: 300px;
+  font-size: 14px;
+  margin: 50px auto;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(black, .3);
+  border: 0;
+}
+ 
+textarea-comment:focus {
+    border: none;
+    outline: none;
+}
+
+.button-send-comment {
+  width: 25%;
+  background-color: #280250;
+  color: #fff;
+  margin: 0;
+}
+

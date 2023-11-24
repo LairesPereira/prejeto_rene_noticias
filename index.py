@@ -5,7 +5,6 @@ from dao import *
 from decouple import config 
 from warnin_colors import text_colors
 
-
 app = Flask(__name__)
 app.secret_key = config("SECRET_KEY")
 
@@ -71,7 +70,7 @@ def show_news_home():
 def read_new():
     news_title = request.args.get('news')
     article = read_article_db(news_title)
-    return render_template('article.html', article=article[0], full_article=True)
+    return render_template('article.html', article=article[0], full_article=True, usuario=session['usuario'], show_comment_area=True)
 
 @app.route('/create_news', methods=['GET', 'POST'])
 def create_news():
@@ -112,6 +111,7 @@ def delete_news_page():
 def update_news_page():
     if 'usuario' in session:
         articles = get_user_articles(session['usuario'])
+        print(articles)
         return render_template('user_news.html', articles=articles, update_delete=True)
 
 @app.route('/update_news_page/', methods=['GET', 'POST'])
@@ -145,6 +145,22 @@ def send_like():
         like_insert = like_count_DB(title, like)
         home_articles = get_articles_db()
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
+
+@app.route("/submit_comment", methods=['POST'])
+def submit_comment():
+    title = request.form.get('title')
+    comment = request.form.get('comment')
+    user = session['usuario']
+    submit_comment_DB(title, comment, user)
+
+@app.route("/search", methods=['POST'])
+def search():
+    search = request.form.get('search_news')
+    usuario = session['usuario']
+
+    match = search_DB(usuario, search)
+    ...
+
 
 
 
