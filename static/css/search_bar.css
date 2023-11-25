@@ -26,6 +26,7 @@
 
   
   .searchInput {
+    box-shadow: 5px 20px 60px rgba(0, 0, 0, 0.5);
     width: 20rem;
     height: 2rem;
     padding: 0 1rem; 

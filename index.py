@@ -4,6 +4,7 @@ from flask_login import *
 from dao import *
 from decouple import config 
 from warnin_colors import text_colors
+import binascii
 
 app = Flask(__name__)
 app.secret_key = config("SECRET_KEY")
@@ -153,17 +154,25 @@ def submit_comment():
     user = session['usuario']
     submit_comment_DB(title, comment, user)
 
-@app.route("/search", methods=['POST'])
+@app.route("/search", methods=["GET", "POST"])
 def search():
     search = request.form.get('search_news')
-    usuario = session['usuario']
+    match = search_DB(search)
+    for i in match:
+        print(i)
+    return render_template('adm_logado.html', articles=match, show_more_btn=True)
 
-    match = search_DB(usuario, search)
-    ...
+@app.route("/user_profile", methods=["GET", "POST"])
+def teste():
+    return render_template('user_profile.html')
 
-
-
-
+@app.route("/upload_profile_pic", methods=["POST"])
+def upload_profile_pic():
+    pic = request.form.get('profile-pic')
+    print(type(pic))
+    with open(pic, 'rb') as f:
+        content = f.read()
+    print(binascii.hexlify(content))
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -5,25 +5,18 @@
   <title>Católica Forum</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/article.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}">
 
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Católica News - {{article[0][1]}}</title>
-	<link rel="stylesheet" type="text/css" href="slide navbar style.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home_adm.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-</head>
-<body>
     <div class="header">
-      <button type="text" onclick="window.location.href = '/create_news'">Inserir Notícia</button>
-      <button type="text" onclick="window.location.href = '/login'" >Notícias</button>
-      <button type="text" onclick="window.location.href = '/user_news'">Minhas notícias</button>
-      <button type="text">Buscar Notícias</button>
-      <button type="text" onclick="window.location.href = '/logOut'" >Sair</button>
+        <nav class="nav nav-borders">
+            <a class="nav-link active ms-0" onclick="window.location.href = '/login'">Home</a>
+            <a class="nav-link" onclick="window.location.href = '/create_news'">Inserir Notícia</a>
+            <a class="nav-link" onclick="window.location.href = '/user_news'">Minhas Notícia</a>
+            <a class="nav-link" onclick="window.location.href = '/user_profile'">Perfil</a>
+        </nav>
     </div>
     <h1 class="catolica-news">{{article[0][1]}}</h1>
     <div class="main" id="main">  	

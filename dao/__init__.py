@@ -198,19 +198,25 @@ def like_count_DB(title, like_action):
         return True
     return False
 
-def search_DB(usuario, search):
+def search_DB(search_news):
     conexao = conectardb()
     cur = conexao.cursor()
 
-    sql = '' 
+    match = list()
+    seacrh_split = search_news.split(' ')
+    for word in seacrh_split:
+        try:
+            query = f"SELECT * FROM noticia WHERE titulo ilike '%{word}%' or corpo ilike '%{word}%'"
+            cur.execute(query)
+        except psycopg2.IntegrityError:
+            conexao.rollback()
+        else:
+            news = cur.fetchall()
+            match.append(news[0])
+        
 
-    try:
-        cur.execute(sql)
-    except psycopg2.IntegrityError:
-        conexao.rollback()
-    else:
-        match = cur.fetchall()
     conexao.close()
+    return match
 
 
 noticias = [
@@ -289,6 +295,7 @@ def send_update_DB(usuario, old_title, news_title, content):
     cur = conexao.cursor()
 
     sql = f"UPDATE noticia SET titulo = '{news_title}', corpo = '{content}' WHERE autor = '{usuario}' and titulo = '{old_title}'"
+
     try:
         cur.execute(sql)
     except psycopg2.IntegrityError:
