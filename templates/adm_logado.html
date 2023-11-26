@@ -14,16 +14,8 @@
 <body>
     <div class="header-adm">
         <nav class="nav nav-borders">
-            <a class="nav-link active ms-0" onclick="window.location.href = '/login'">Home</a>
-            <a class="nav-link" onclick="window.location.href = '/create_news'">Inserir Notícia</a>
-            <a class="nav-link" onclick="window.location.href = '/user_news'">Minhas Notícia</a>
-            <a class="nav-link" onclick="window.location.href = '/user_profile'">Perfil</a>
+            {% include "header.html" %}
         </nav>
-        <!-- <button type="text" onclick="window.location.href = '/create_news'">Inserir Notícia</button>
-        <button type="text" onclick="window.location.href = '/login'" >Notícias</button>
-        <button type="text" onclick="window.location.href = '/user_news'">Minhas notícias</button>
-        <button type="text" onclick="window.location.href = '/user_profile'">Perfil</button>
-        <button type="text" onclick="window.location.href = '/logOut'" >Sair</button> -->
     </div>
 	<div class="main" id="main">  	
         <!-- Inclui o elemento reutilizável e passa os dados dinâmicos -->

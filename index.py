@@ -4,7 +4,10 @@ from flask_login import *
 from dao import *
 from decouple import config 
 from warnin_colors import text_colors
-import binascii
+from PIL import Image
+from io import BytesIO
+from parse_articles import parse_articles_to_download
+import os
 
 app = Flask(__name__)
 app.secret_key = config("SECRET_KEY")
@@ -35,7 +38,7 @@ def login():
     usuarios = get_users(sql, conexao)
 
     for usuario in usuarios:
-        username, password, full_name, cpf, is_adm, email, user_id = usuario
+        username, password, full_name, cpf, is_adm, email, user_id, profile_pic, cidade, telefone, nascimento = usuario
         if(login == username and senha == password):
             session['usuario'] = login
 
@@ -164,15 +167,42 @@ def search():
 
 @app.route("/user_profile", methods=["GET", "POST"])
 def teste():
-    return render_template('user_profile.html')
+    user = session['usuario']
+    user_info = get_user_info(user)
+    return render_template('user_profile.html', user=user_info[0])
 
 @app.route("/upload_profile_pic", methods=["POST"])
 def upload_profile_pic():
-    pic = request.form.get('profile-pic')
-    print(type(pic))
-    with open(pic, 'rb') as f:
-        content = f.read()
-    print(binascii.hexlify(content))
+    pic = request.files['profile-pic']
+    img = pic.read()
+    
+    # Image.open(pic)
+    # pixels = list(img.getdata())
+    # hex_pixels = [f'{pixel[0]:02X}{pixel[1]:02X}{pixel[2]:02X}' for pixel in pixels]
+    
+    store_pic = upload_profile_pic_DB(session['usuario'], img)
+    print(store_pic)
+
+@app.route("/download_news", methods=["GET"])
+def download_news():
+    user = session['usuario']
+    articles = get_user_articles(user)
+
+    parsed_article_path = parse_articles_to_download(user, articles)
+    
+    # Deletar arquivos após serem enviados para downlad
+    @after_this_request
+    def remove_file(response):
+        try:
+            os.remove(parsed_article_path)
+        except Exception as error:
+            print(error)
+        return response
+    return send_file(parsed_article_path, as_attachment=True)
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

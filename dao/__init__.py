@@ -13,6 +13,23 @@ def conectardb():
 
     return con
 
+def get_user_info(user):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT * FROM usuario WHERE nome_usuario = '{user}'"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        result = cur.fetchall()
+    
+    conexao.close()
+    cur.close()
+    return result
+
 def get_users(sql, conexao): 
     cur = conexao.cursor()
 
@@ -319,6 +336,28 @@ def submit_comment_DB(title, comment, user):
     else:
         conexao.commit()
         conexao.close()
+
+def upload_profile_pic_DB(user, imagem_bytes):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+
+
+    nome_usuario = 'Laires'
+    try:
+        cur.execute("""
+    INSERT INTO usuario (nome_usuario, profile_pic)
+    VALUES (%s, %s)
+    ON CONFLICT (nome_usuario) DO UPDATE
+    SET profile_pic = EXCLUDED.profile_pic
+""", (nome_usuario, psycopg2.Binary(imagem_bytes)))
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        conexao.commit
+    conexao.close()
+    cur.close()
+
 
 # query_teste()
 
