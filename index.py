@@ -117,8 +117,9 @@ def read_new():
     news_title = request.args.get('news')
     article = read_article_db(news_title)
     profile_pics = get_profile_pics(article)
+    comments = get_news_comments(news_title)
     if session['usuario'][1]:
-        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, adm_options=True)
+        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=True, profile_pic=profile_pics, adm_options=True)
     return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics)
 
 @app.route('/create_news', methods=['GET', 'POST'])

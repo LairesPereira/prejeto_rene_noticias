@@ -75,6 +75,17 @@
       <button class="button-send-comment submit-comment" data-article-title="{{article[1]}}" id="submit-comment" type="submit">Enviar</button>
     {% endif %}
 
+    {% if show_comments %}
+      <h3>Comentários</h3>
+      <ul class="list-group">
+        <li class="list-group-item">An item</li>
+        <li class="list-group-item">A second item</li>
+        <li class="list-group-item">A third item</li>
+        <li class="list-group-item">A fourth item</li>
+        <li class="list-group-item">And a fifth one</li>
+      </ul>
+    {% endif %}
+
     {% if show_more_btn %}
       <span class="button">
         <button class="show-more-btn show-more-button" id="show-more-button" data-article-title="{{ article[1] }}">Ver mais</button>

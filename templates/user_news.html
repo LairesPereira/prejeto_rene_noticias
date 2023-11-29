@@ -28,7 +28,6 @@
         cardsDelete.forEach(function (card) {
             const articleId = card.getAttribute('data-article-title');
             card.addEventListener('click', function () {
-                console.log('Clicou no artigo com ID:', articleId);
                 window.location.href = `delete_news_page/delete/?news=${articleId}`
             });
         });
@@ -36,7 +35,6 @@
         cardsUpdate.forEach(function (card) {
             const articleId = card.getAttribute('data-article-title');
             card.addEventListener('click', function () {
-                console.log('Clicou no artigo com ID:', articleId);
                 window.location.href = `update_news_page/?news=${articleId}`
             });
         });

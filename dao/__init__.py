@@ -2,7 +2,7 @@ import psycopg2
 # from datetime import datetime
 from decouple import config
 import random
-from index import get_random_profile_pic
+# from index import get_random_profile_pic
 
 def conectardb():
     con = psycopg2.connect(
@@ -30,6 +30,23 @@ def get_user_info(user):
     conexao.close()
     cur.close()
     return result
+
+def get_news_id_by_title(title):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT id FROM noticia where titulo = '{title}'"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        id = cur.fetchall()
+    
+    cur.close()    
+    conexao.close()
+    return id[0][0]
 
 def get_users(login, pswd): 
     conexao = conectardb()
@@ -341,12 +358,34 @@ def send_update_DB(usuario, old_title, news_title, content):
         return True
     return False
 
+def get_last_comment_id():
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT MAX(id) FROM comentario;"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        last_id = cur.fetchall()
+        if not last_id[0][0]:
+            last_id = 1
+        cur.close()
+        conexao.close()
+    print(last_id)
+    return last_id
+
 def submit_comment_DB(title, comment, user):
     conexao = conectardb()
     cur = conexao.cursor()
 
-    sql = f""
-    
+    id = get_news_id_by_title(title)
+    last_comment_id = get_last_comment_id()
+
+    sql = f"INSERT INTO comentario (id, comentario, autor) VALUES ({id}, '{comment}', '{user}')"
+    print(sql)
     try:
         cur.execute(sql)
     except psycopg2.IntegrityError:
@@ -354,6 +393,9 @@ def submit_comment_DB(title, comment, user):
     else:
         conexao.commit()
         conexao.close()
+
+def get_news_comments():
+    ...
 
 def upload_profile_pic_DB(user, imagem_bytes):
     conexao = conectardb()
