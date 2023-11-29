@@ -2,6 +2,7 @@ import psycopg2
 # from datetime import datetime
 from decouple import config
 import random
+from index import get_random_profile_pic
 
 def conectardb():
     con = psycopg2.connect(
@@ -30,43 +31,41 @@ def get_user_info(user):
     cur.close()
     return result
 
-def get_users(sql, conexao): 
+def get_users(login, pswd): 
+    conexao = conectardb()
     cur = conexao.cursor()
 
+    query = f"SELECT * FROM usuario WHERE nome_usuario = '{login}' AND senha = '{pswd}'"
+    
     try:
-        cur.execute(sql)
-        adms_list = cur.fetchall()
+        cur.execute(query)
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
+        user = cur.fetchall()
         conexao.close()
-
-    return adms_list
+        
+    return user
 
 def create_user_db(name, password, email, conexao):
     cur = conexao.cursor()
     
-    query_check_email_exists= f"SELECT COUNT(*) AS total FROM usuario WHERE nome_usuario = '{name}' OR email = '{email}';"
+    query_check_email_exists= f"SELECT * FROM usuario WHERE nome_usuario = '{name}' OR email = '{email}';"
 
     search_result = 0
     try:
         cur.execute(query_check_email_exists)
-        fetch = cur.fetchall()
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
-        conexao.commit()
-        search_result = fetch[0][0]
+        fetch = cur.fetchall()
+        print(fetch)
+        search_result = len(fetch)
 
     if search_result == 0:
-        last_id_query = "SELECT * FROM usuario ORDER BY id DESC LIMIT 1;"
 
-        cur.execute(last_id_query)
+        sql = f"insert into usuario values ('{name}', '{password}', null, null, 'false', '{email}', null)"
 
-        last_id = cur.fetchall()
-
-        sql = f"insert into usuario values ({last_id[0][0] + 1}, '{name}', '{password}', null, null, 'false', '{email}')"
-        
         try:
             cur.execute(sql)
         except psycopg2.IntegrityError:
@@ -77,6 +76,8 @@ def create_user_db(name, password, email, conexao):
 
         conexao.close()
         return search_result
+    
+    return search_result
 
 def create_article_db(noticias, conexao):
     cur = conexao.cursor()
@@ -235,6 +236,23 @@ def search_DB(search_news):
     conexao.close()
     return match
 
+def get_profile_pic_DB(user_name):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT profile_pic FROM usuario WHERE nome_usuario = '{user_name}'"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        bin_pic = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return bin_pic
+    return
+
 
 noticias = [
     'Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.Alunos dedicados da Faculdade Z uniram forças para organizar um evento de voluntariado na comunidade local. A iniciativa visa criar impacto positivo e fortalecer os laços entre a academia e a sociedade. Vestibulum rhoncus auctor metus, id sagittis nisi ullamcorper non. Donec sit amet facilisis tellus. Quisque sit amet egestas justo. Maecenas sed est vitae tortor bibendum mattis. In bibendum arcu vel justo efficitur, nec suscipit ligula dictum.',
@@ -341,22 +359,15 @@ def upload_profile_pic_DB(user, imagem_bytes):
     conexao = conectardb()
     cur = conexao.cursor()
 
-
-
-    nome_usuario = 'Laires'
     try:
-        cur.execute("""
-    INSERT INTO usuario (nome_usuario, profile_pic)
-    VALUES (%s, %s)
-    ON CONFLICT (nome_usuario) DO UPDATE
-    SET profile_pic = EXCLUDED.profile_pic
-""", (nome_usuario, psycopg2.Binary(imagem_bytes)))
+        cur.execute(f"UPDATE usuario SET profile_pic = %s WHERE nome_usuario = %s", (psycopg2.Binary(imagem_bytes), user))
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
-        conexao.commit
+        conexao.commit()
     conexao.close()
     cur.close()
+
 
 
 # query_teste()

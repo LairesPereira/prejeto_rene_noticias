@@ -5,21 +5,94 @@
 	<title>Slide Navbar</title>
 	<link rel="stylesheet" type="text/css" href="slide navbar style.css">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home_adm.css') }}">
-    <script src="{{ url_for('static', filename='js/fetchNews.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
 </head>
 <body>
     <div class="header-adm">
-        <button type="text" onclick="getAllNews()">Ver Notícias</button>
-        <button type="text">Sair</button>
+        <nav class="nav nav-borders">
+            {% include "header.html" %}
+        </nav>
     </div>
 	<div class="main"id="main">  	
+         <!-- Inclui o elemento reutilizável e passa os dados dinâmicos -->
+         <div class="container-search">
+            <div class="searchInputWrapper">
+              <form action="/search" method="post">
+                <input name="search_news" class="searchInput" id="searchInput" type="text" placeholder='Busque uma notíca'>
+                <i class="searchInputIcon fa fa-search"></i>
+                </input>
+              </form>
+            </div>
+          </div>
+        {% for article in articles  %}
+            {% include 'card.html' %}
+        {% endfor %}
 	</div>
 </body>
 <script>
-    window.addEventListener("load", function() {
-        getAllNews()
-    })
+    document.addEventListener('DOMContentLoaded', function () {
+        const cards = document.querySelectorAll('.show-more-button');
+        const hearts = document.querySelectorAll('.heart-svg')
+        const search = document.querySelector(".searchInput");
+
+        hearts.forEach(function (card) {
+            const articleId = card.getAttribute('data-article-title');
+            console.log(articleId)
+
+            // Initial color
+            let like = false
+            let currentColor = '#000000';
+            card.addEventListener('click', function() { 
+
+                currentColor = (currentColor === '#000000') ? '#e12929' : '#000000';
+                like = (like === false) ? true : false;
+                
+                likesCounter = parseInt(document.getElementById(`${articleId}-total-likes`).innerHTML)
+
+                if(like) {
+                    document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter + 1
+                } else {
+                    document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter - 1
+                }
+
+                // Apply the new color
+                card.setAttribute("fill", currentColor)
+                
+                const data = new URLSearchParams();
+                data.append('like', like.toString())
+                data.append('title', articleId)
+
+                fetch('send_like', {
+                    method: 'POST',
+                    body: data,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                })
+                .then(response => {
+                    // Lide com a resposta, se necessário
+                    console.log(response);
+                    // window.location.href = '/login'
+                })
+                .catch(error => {
+                    // Lide com o erro, se necessário
+                    console.error('Erro ao enviar a solicitação:', error);
+                });
+
+            })
+        })
+
+        cards.forEach(function (card) {
+            const articleId = card.getAttribute('data-article-title');
+            card.addEventListener('click', function() {
+                console.log('Clicou no artigo com ID:', articleId);
+                window.location.href = `/login/get_news/?news=${articleId}`
+            });
+        });
+    });
 </script>
 </html>
 </body>

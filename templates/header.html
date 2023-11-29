@@ -1,6 +1,7 @@
-
 <a class="nav-link" onclick="window.location.href = '/login'">Home</a>
+{% if adm_options %}
 <a class="nav-link" onclick="window.location.href = '/create_news'">Inserir Notícia</a>
 <a class="nav-link" onclick="window.location.href = '/user_news'">Minhas Notícia</a>
+{% endif %}
 <a class="nav-link" onclick="window.location.href = '/user_profile'">Perfil</a>
 <a class="nav-link" onclick="window.location.href = '/logOut'">Sair</a>
