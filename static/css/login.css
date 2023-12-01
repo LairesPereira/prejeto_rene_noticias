@@ -92,3 +92,20 @@ button:hover{
   color: #000; /* Define a cor do texto como branco */
   text-align: center; /* Centraliza o texto horizontalmente */
 }
+
+.adm_input_container {
+	display: flex;
+	font-size: 5px;
+}
+
+.adm_input_signup{
+	margin: 0px;
+	width: 15px;
+	height: 15px;
+	margin-right: 10px;
+	margin-left: 20%;
+}
+
+.adm_input_label {
+	margin: 0;
+}

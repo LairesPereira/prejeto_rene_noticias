@@ -24,44 +24,42 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const hearts = document.querySelectorAll('.heart-svg')
-    const submitButtons = document.querySelectorAll('.submit-comment')
+    // const submitButtons = document.querySelectorAll('.submit-comment')
 
-    submitButtons.forEach(function (btn) {
-      const articleId = btn.getAttribute('data-article-title')
-      btn.addEventListener('click', function(e) {
-        e.preventDefault()
+    // submitButtons.forEach(function (btn) {
+    //   const articleId = btn.getAttribute('data-article-title')
+    //   btn.addEventListener('click', function(e) {
+    //     e.preventDefault()
         
-        comment = document.getElementById('comment-text-area').value
-        console.log(comment)
+    //     comment = document.getElementById('comment-text-area').value
+    //     console.log(comment)
 
-        if(comment) {
-          path = window.location.origin + '/submit_comment'
+    //     if(comment) {
+    //       path = window.location.origin + '/submit_comment'
             
-          const data = new URLSearchParams();
-          data.append('comment', comment)
-          data.append('title', articleId)
+    //       const data = new URLSearchParams();
+    //       data.append('comment', comment)
+    //       data.append('title', articleId)
 
           
-          fetch(path, {
-              method: 'POST',
-              body: data,
-              headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-              },
-          })
-          .then(response => {
-              // Lide com a resposta, se necessário
-              console.log(response);
-              // window.location.href = '/login'
-          })
-          .catch(error => {
-              // Lide com o erro, se necessário
-              console.error('Erro ao enviar a solicitação:', error);
-          });
+        //   fetch('ignore', {
+        //       method: 'POST',
+        //       body: data,
+        //       headers: {
+        //           'Content-Type': 'application/x-www-form-urlencoded',
+        //       },
+        //   })
+        //   .then(response => {
+        //       // Lide com a resposta, se necessário
+        //       console.log(response);
+        //       // window.location.href = '/login'
+        //   })
+        //   .catch(error => {
+        //       // Lide com o erro, se necessário
+        //       console.error('Erro ao enviar a solicitação:', error);
+        //   });
          
-        }
-    })
-})
+
 
     hearts.forEach(function (card) {
         const articleId = card.getAttribute('data-article-title');

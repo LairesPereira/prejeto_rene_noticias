@@ -8,21 +8,37 @@ from PIL import Image
 from io import BytesIO
 from parse_articles import parse_articles_to_download
 from random import randint
-import re
 import os
 import base64
+from email_validator import validate_email, EmailNotValidError
+
 
 app = Flask(__name__)
 app.secret_key = config("SECRET_KEY")
 
-def validate_login(pswd):
+def validate_login(pswd, email):
+    # validate password
+    validate_result = [False, False, None]
     if len(pswd) > 6:
         for char in pswd:
             if char.isupper():
-                return True
-        return False
-    else:
-        return False
+                validate_result[0] = True
+
+    try:
+        # Check that the email address is valid. Turn on check_deliverability
+        # for first-time validations like on account creation pages (but not
+        # login pages).
+        emailinfo = validate_email(email, check_deliverability=False)
+        validate_result[1] = True
+        # After this point, use only the normalized form of the email address,
+        # especially before going to a database query.
+        email = emailinfo.normalized
+    except EmailNotValidError as e:
+        validate_result[2] = e
+        # The exception message is human-readable explanation of why it's
+        # not a valid (or deliverable) email address.
+
+    return validate_result
 
 
 def get_user_logged():
@@ -91,20 +107,31 @@ def create_user():
     name = str(request.form.get('txt'))
     password = str(request.form.get('pswd'))
     email = str(request.form.get('email'))
-    profile_pic = get_random_profile_pic()
+    validate_credentials = validate_login(password, email)
+    isadm_val = request.form.get('isadm')
+    isadm = True if isadm_val == 'on' else False
+    home_articles = get_articles_db()
+
+    profile_pics = get_profile_pics(home_articles)
+
     conexao = conectardb()
     
-    if not validate_login(password):
+    if not validate_credentials[0] or validate_credentials[1]:
         print('nao passou')
-        return render_template('login_page.html', sign_up=False)
-
-    create = create_user_db(name, password, email, conexao)
+        return render_template('login_page.html', sigun_up=False)
+    
+    print(name, password, email, conexao, isadm)
+    create = create_user_db(name, password, email, conexao, isadm)
     print(create)
-
-    if create == 0:
-        return render_template('usuario_logado.html')
-    else:
-        return render_template('login_page.html', sign_up=False)
+    if create[0]:
+        return render_template('login_page.html', sigun_up=False)
+    if create[1] and isadm:
+        session['usuario'] = [name, isadm]
+        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, adm_options=True, profile_pic=profile_pics)
+    if create[1] and isadm == False:
+        session['usuario'] = [name, isadm]
+        return render_template('usuario_logado.html', articles=home_articles, profile_pic=profile_pics, show_more_btn=True)
+    
 
 @app.route('/login/news')
 def show_news_home():
@@ -119,7 +146,7 @@ def read_new():
     profile_pics = get_profile_pics(article)
     comments = get_news_comments(news_title)
     if session['usuario'][1]:
-        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=True, profile_pic=profile_pics, adm_options=True)
+        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True)
     return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics)
 
 @app.route('/create_news', methods=['GET', 'POST'])
@@ -200,10 +227,18 @@ def send_like():
 
 @app.route("/submit_comment", methods=['POST'])
 def submit_comment():
+
     title = request.form.get('title')
     comment = request.form.get('comment')
     user = get_user_logged()
+
     submit_comment_DB(title, comment, user)
+
+    article = read_article_db(title)
+    profile_pics = get_profile_pics(article)
+    comments = get_news_comments(title)
+    
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm())
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -218,7 +253,7 @@ def teste():
     user_info = get_user_info(user)
     print(user_info)
     # decode binary image from db to base64
-    image_base64 = base64.b64encode(bytes(user_info[0][7])).decode('utf-8') 
+    # image_base64 = base64.b64encode(bytes(user_info[0][7])).decode('utf-8') 
     
     return render_template('user_profile.html', user=user_info[0], profile_pic=image_base64, adm_options=user_isadm())
 

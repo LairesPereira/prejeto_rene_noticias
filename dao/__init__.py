@@ -64,37 +64,41 @@ def get_users(login, pswd):
         
     return user
 
-def create_user_db(name, password, email, conexao):
+def create_user_db(name, password, email, conexao, isadm):
     cur = conexao.cursor()
     
     query_check_email_exists= f"SELECT * FROM usuario WHERE nome_usuario = '{name}' OR email = '{email}';"
 
-    search_result = 0
+    user_already_exists = False
+    user = []
+    insert_result = False
+
     try:
         cur.execute(query_check_email_exists)
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
         fetch = cur.fetchall()
-        print(fetch)
-        search_result = len(fetch)
+        if len(fetch): 
+            user_already_exists = True
+            user = fetch
 
-    if search_result == 0:
+    if not user_already_exists:
 
-        sql = f"insert into usuario values ('{name}', '{password}', null, null, 'false', '{email}', null)"
-
+        sql = f"insert into usuario values ('{name}', '{password}', null, null, '{isadm}', '{email}', null)"
+        
         try:
             cur.execute(sql)
         except psycopg2.IntegrityError:
             conexao.rollback()
         else:
             conexao.commit()
-            search_result = 1
+            insert_result = True
 
         conexao.close()
-        return search_result
+        return [user_already_exists, insert_result, user]
     
-    return search_result
+    return [user_already_exists, insert_result, user]
 
 def create_article_db(noticias, conexao):
     cur = conexao.cursor()
@@ -104,7 +108,6 @@ def create_article_db(noticias, conexao):
     # sql = "INSERT INTO usuario VALUES ('Rene', '123', 'Rene Gadelha', '123456', True, 'lairespsoares@gmai.com')"
 
     sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}')"
-    print(sql)
     try:
         cur.execute(sql, (titulo, autor, curtidas, removida, corpo))
         sucess = True
@@ -118,7 +121,6 @@ def create_article_db(noticias, conexao):
     return sucess
 
 def get_user_articles(user):
-    print(user)
     conexao = conectardb()
     cur = conexao.cursor()
 
@@ -162,11 +164,9 @@ def get_article(title, user):
 
     except psycopg2.IntegrityError:
         conexao.rollback()
-        print('rollback')
     else:
         article = cur.fetchall()
         conexao.close()
-        print('TAMO AQUIIII')
         return article
 
     conexao.close()
@@ -179,21 +179,18 @@ def read_article_db(title):
     sql = f"SELECT * FROM noticia WHERE titulo = '{title}' "
 
     try:
-        print(sql)
         cur.execute(sql)
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
         article = cur.fetchall()
         conexao.close()
-        print('articleeee', article)
         return article
     
     conexao.close()
     return article
 
 def delete_article_db(title, usuario):
-    print(title)
     conexao = conectardb()
     cur = conexao.cursor()
 
@@ -221,10 +218,8 @@ def like_count_DB(title, like_action):
     try:
         if like_action == 'true':
             cur.execute(sql_inc)
-            print(sql_inc)
         else:
             cur.execute(sql_dec)
-            print(sql_dec)
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
@@ -334,7 +329,6 @@ def query_teste():
     try:
         cur.execute(sql)
         result = cur.fetchall()
-        print(result)
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
@@ -374,7 +368,6 @@ def get_last_comment_id():
             last_id = 1
         cur.close()
         conexao.close()
-    print(last_id)
     return last_id
 
 def submit_comment_DB(title, comment, user):
@@ -385,7 +378,7 @@ def submit_comment_DB(title, comment, user):
     last_comment_id = get_last_comment_id()
 
     sql = f"INSERT INTO comentario (id, comentario, autor) VALUES ({id}, '{comment}', '{user}')"
-    print(sql)
+
     try:
         cur.execute(sql)
     except psycopg2.IntegrityError:
@@ -394,8 +387,23 @@ def submit_comment_DB(title, comment, user):
         conexao.commit()
         conexao.close()
 
-def get_news_comments():
-    ...
+def get_news_comments(title):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    id = get_news_id_by_title(title)
+
+    query = f"SELECT * FROM comentario WHERE id = {id}"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        comments = cur.fetchall()
+    cur.close()
+    conexao.close()
+    return comments
 
 def upload_profile_pic_DB(user, imagem_bytes):
     conexao = conectardb()

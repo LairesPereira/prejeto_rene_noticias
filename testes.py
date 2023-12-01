@@ -33,16 +33,36 @@
 
 # get_random_profile_pic()
 
-import re
+# import re
 
-def validate_login(pswd):
+# def validate_login(pswd):
 
-    if len(pswd) > 6:
-        for char in pswd:
-            if char.isupper():
-                return True
-        return False
-    else:
-        return False
+#     if len(pswd) > 6:
+#         for char in pswd:
+#             if char.isupper():
+#                 return True
+#         return False
+#     else:
+#         return False
     
 # validate_login('lairessS')
+
+from email_validator import validate_email, EmailNotValidError
+
+email = "laires@gmail"
+
+try:
+
+  # Check that the email address is valid. Turn on check_deliverability
+  # for first-time validations like on account creation pages (but not
+  # login pages).
+  emailinfo = validate_email(email, check_deliverability=False)
+  print('aqui')
+  # After this point, use only the normalized form of the email address,
+  # especially before going to a database query.
+  email = emailinfo.normalized
+except EmailNotValidError as e:
+
+  # The exception message is human-readable explanation of why it's
+  # not a valid (or deliverable) email address.
+  print(str(e))

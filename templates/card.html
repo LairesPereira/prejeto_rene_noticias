@@ -71,18 +71,21 @@
     {% endif %}
 
     {% if show_comment_area %}
-      <textarea class='autoExpand textarea-comment' id="comment-text-area" rows='3' data-min-rows='3' placeholder='Digite aqui seu comentário' autofocus required></textarea>    
-      <button class="button-send-comment submit-comment" data-article-title="{{article[1]}}" id="submit-comment" type="submit">Enviar</button>
+      <form action="/submit_comment" method="POST">
+        <input style="display: none;" type="text" value="{{article[1]}}" name="title"></input>
+        <textarea class='autoExpand textarea-comment' name="comment" id="comment-text-area" rows='3' data-min-rows='3' placeholder='Digite aqui seu comentário'  maxlength="200" autofocus required></textarea>    
+        <button class="button-send-comment submit-comment" data-article-title="{{article[1]}}" id="submit-comment" type="submit">Enviar</button>
+      </form>
     {% endif %}
 
     {% if show_comments %}
       <h3>Comentários</h3>
       <ul class="list-group">
-        <li class="list-group-item">An item</li>
-        <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li>
-        <li class="list-group-item">A fourth item</li>
-        <li class="list-group-item">And a fifth one</li>
+        {% for tuple in show_comments %}
+          <li class="list-group-item">{{tuple[2]}}</li>
+          <p>{{tuple[1]}}</p>
+          <hr class="solid">
+        {% endfor %}
       </ul>
     {% endif %}
 
