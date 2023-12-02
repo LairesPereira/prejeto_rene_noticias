@@ -36,8 +36,16 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const cards = document.querySelectorAll('.show-more-button');
-        const hearts = document.querySelectorAll('.heart-svg')
+        const hearts = document.querySelectorAll('.heart-svg');
+        const comments = document.querySelectorAll('.comment-svg')
         const search = document.querySelector(".searchInput");
+
+        comments.forEach(function (card) {
+            const articleId = card.getAttribute('data-article-title');
+            card.addEventListener('click', function(){
+                window.location.href = `login/get_news/?news=${articleId}`
+            })
+        })
 
         hearts.forEach(function (card) {
             const articleId = card.getAttribute('data-article-title');
@@ -47,7 +55,7 @@
             let like = false
             let currentColor = '#000000';
             card.addEventListener('click', function() { 
-
+                
                 currentColor = (currentColor === '#000000') ? '#e12929' : '#000000';
                 like = (like === false) ? true : false;
                 

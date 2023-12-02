@@ -181,10 +181,10 @@ def delete_news():
 
 @app.route('/delete_news_page', methods=['GET', 'DELETE'])
 def delete_news_page():
-    if 'usuario' in session:
+    if 'usuario' in session and session['usuario'][1]:
         articles = get_user_articles(get_user_logged())
         profile_pics = get_profile_pics(articles)
-        return render_template('user_news.html', articles=articles, update_delete=True, profile_pic=profile_pics)
+        return render_template('user_news.html', articles=articles, update_delete=True, profile_pic=profile_pics, adm_options=True)
 
 @app.route('/user_news')
 def update_news_page():
@@ -243,7 +243,7 @@ def submit_comment():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     search = request.form.get('search_news')
-    match = search_DB(search)
+    match = search_articles_DB(search)
     profile_pics = get_profile_pics(match)
     return render_template('adm_logado.html', articles=match, show_more_btn=True, profile_pic=profile_pics, adm_options=user_isadm() )
 
@@ -253,7 +253,7 @@ def teste():
     user_info = get_user_info(user)
     print(user_info)
     # decode binary image from db to base64
-    # image_base64 = base64.b64encode(bytes(user_info[0][7])).decode('utf-8') 
+    image_base64 = base64.b64encode(bytes(user_info[0][7])).decode('utf-8') 
     
     return render_template('user_profile.html', user=user_info[0], profile_pic=image_base64, adm_options=user_isadm())
 

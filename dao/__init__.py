@@ -251,7 +251,6 @@ def search_DB(search_news):
 def get_profile_pic_DB(user_name):
     conexao = conectardb()
     cur = conexao.cursor()
-
     query = f"SELECT profile_pic FROM usuario WHERE nome_usuario = '{user_name}'"
 
     try:
@@ -415,6 +414,24 @@ def upload_profile_pic_DB(user, imagem_bytes):
         conexao.rollback()
     else:
         conexao.commit()
+    conexao.close()
+    cur.close()
+
+def search_articles_DB(search):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT * FROM noticia WHERE titulo ilike '%{search}%' or corpo ilike '%{search}%'"
+    
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else: 
+        fetch = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return fetch
     conexao.close()
     cur.close()
 
