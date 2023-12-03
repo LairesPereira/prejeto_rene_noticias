@@ -1,8 +1,7 @@
 import psycopg2
-# from datetime import datetime
 from decouple import config
 import random
-# from index import get_random_profile_pic
+import base64
 
 def conectardb():
     con = psycopg2.connect(
@@ -13,6 +12,13 @@ def conectardb():
     )
 
     return con
+
+def random_profile_pic():
+    image_path = f'static/avatars/avatar_{random.randint(1,5)}.jpg'
+    with open(image_path, "rb") as image_file:
+        # Encode the image in base64
+        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+    return encoded_image
 
 def get_user_info(user):
     conexao = conectardb()
@@ -30,6 +36,27 @@ def get_user_info(user):
     conexao.close()
     cur.close()
     return result
+
+def get_last_id(column):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT MAX(id) FROM {column};"
+    
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+        conexao.close()
+        cur.close()
+        return
+    else:
+        fetch = cur.fetchall()
+        print(fetch)
+        if fetch[0][0] == None:
+            return 1
+        return fetch[0][0]
+    
 
 def get_news_id_by_title(title):
     conexao = conectardb()
@@ -64,7 +91,8 @@ def get_users(login, pswd):
         
     return user
 
-def create_user_db(name, password, email, conexao, isadm):
+def create_user_db(name, password, email, isadm):
+    conexao = conectardb()
     cur = conexao.cursor()
     
     query_check_email_exists= f"SELECT * FROM usuario WHERE nome_usuario = '{name}' OR email = '{email}';"
@@ -83,12 +111,12 @@ def create_user_db(name, password, email, conexao, isadm):
             user_already_exists = True
             user = fetch
 
-    if not user_already_exists:
+    if not user_already_exists:        
 
-        sql = f"insert into usuario values ('{name}', '{password}', null, null, '{isadm}', '{email}', null)"
-        
+        sql = "INSERT INTO usuario (nome_usuario, senha, email, isadm, id, profile_pic) VALUES (%s, %s, %s, %s, %s, %s);"
+        last_id = get_last_id('usuario')
         try:
-            cur.execute(sql)
+            cur.execute(sql, (name, password, email, isadm, last_id + 1, random_profile_pic()))
         except psycopg2.IntegrityError:
             conexao.rollback()
         else:
@@ -96,6 +124,7 @@ def create_user_db(name, password, email, conexao, isadm):
             insert_result = True
 
         conexao.close()
+        cur.close()
         return [user_already_exists, insert_result, user]
     
     return [user_already_exists, insert_result, user]
@@ -104,8 +133,6 @@ def create_article_db(noticias, conexao):
     cur = conexao.cursor()
 
     titulo, autor, curtidas, removida, corpo = noticias
-
-    # sql = "INSERT INTO usuario VALUES ('Rene', '123', 'Rene Gadelha', '123456', True, 'lairespsoares@gmai.com')"
 
     sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}')"
     try:
@@ -252,7 +279,6 @@ def get_profile_pic_DB(user_name):
     conexao = conectardb()
     cur = conexao.cursor()
     query = f"SELECT profile_pic FROM usuario WHERE nome_usuario = '{user_name}'"
-
     try:
         cur.execute(query)
     except psycopg2.IntegrityError:
@@ -302,8 +328,9 @@ titulos_noticias = [
 
 def inserir_mock():
     conexao = conectardb()
+    pic = random_profile_pic()
     for i in range(len(noticias)):
-        tupla = (titulos_noticias[i], 'Rene', random.randint(0, 2000), False, noticias[i])
+        tupla = (titulos_noticias[i], 'Laires', 0, False, noticias[i])
         create_article_db(tupla, conexao)
     
     conexao.close()
@@ -404,12 +431,12 @@ def get_news_comments(title):
     conexao.close()
     return comments
 
-def upload_profile_pic_DB(user, imagem_bytes):
+def upload_profile_pic_DB(user, image_base64):
     conexao = conectardb()
     cur = conexao.cursor()
 
     try:
-        cur.execute(f"UPDATE usuario SET profile_pic = %s WHERE nome_usuario = %s", (psycopg2.Binary(imagem_bytes), user))
+        cur.execute(f"UPDATE usuario SET profile_pic = %s WHERE nome_usuario = %s", (image_base64, user))
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:

@@ -61,13 +61,9 @@ def get_profile_pics(articles):
     for article in articles:
         user_name = article[2]
         if not user_name in profile_pics:
+            print('not in dic')
             bin_pic = get_profile_pic_DB(user_name)
-            print(bin_pic)
-            print(type(bin_pic))
-            if bin_pic:
-                converted_pic = base64.b64encode(bytes(bin_pic[0][0])).decode('utf-8')
-                profile_pics[user_name] = converted_pic
-
+            profile_pics[user_name] = bin_pic[0][0]
     return profile_pics
 
 @app.route('/')
@@ -95,7 +91,6 @@ def login():
         is_adm = usuario[0][4]
 
         session['usuario'] = [login, is_adm]
-        print(session)
         if is_adm:
             return render_template('adm_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), adm_options=True)
         return render_template('usuario_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), show_more_btn=True )
@@ -111,21 +106,17 @@ def create_user():
     isadm_val = request.form.get('isadm')
     isadm = True if isadm_val == 'on' else False
     home_articles = get_articles_db()
-
     profile_pics = get_profile_pics(home_articles)
 
     conexao = conectardb()
     
-    if not validate_credentials[0] or validate_credentials[1]:
-        print('nao passou')
+    if validate_credentials[0] == False or validate_credentials[1] == False:
         return render_template('login_page.html', sigun_up=False)
     
-    print(name, password, email, conexao, isadm)
-    create = create_user_db(name, password, email, conexao, isadm)
-    print(create)
-    if create[0]:
+    create = create_user_db(name, password, email, isadm)
+    if create[0] == False and create[1] == False:
         return render_template('login_page.html', sigun_up=False)
-    if create[1] and isadm:
+    if create[0] == False and create[1] == True and isadm == True:
         session['usuario'] = [name, isadm]
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, adm_options=True, profile_pic=profile_pics)
     if create[1] and isadm == False:
@@ -217,10 +208,8 @@ def send_update():
 @app.route("/send_like", methods=['POST'])
 def send_like():
     if 'usuario' in session:
-        print(request.form)
         title = request.form.get('title')
         like = request.form.get('like')
-        print(text_colors.FAIL + 'AQUI', title)
         like_insert = like_count_DB(title, like)
         home_articles = get_articles_db()
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
@@ -251,17 +240,16 @@ def search():
 def teste():
     user = get_user_logged()
     user_info = get_user_info(user)
-    print(user_info)
     # decode binary image from db to base64
-    image_base64 = base64.b64encode(bytes(user_info[0][7])).decode('utf-8') 
+    image_base64 = user_info[0][7] 
     
     return render_template('user_profile.html', user=user_info[0], profile_pic=image_base64, adm_options=user_isadm())
 
 @app.route("/upload_profile_pic", methods=["POST"])
 def upload_profile_pic():
     user = get_user_logged()
-    print(request.files['profile-pic'])
     img = request.files['profile-pic'].read()
+    img = base64.b64encode(img).decode('utf-8')
     upload_profile_pic_DB(user, img)
 
     return redirect('/user_profile')
