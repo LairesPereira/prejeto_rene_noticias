@@ -13,7 +13,15 @@
       <span class="stars evaluation">
         <span class="star-icon evaluation-icon">
           <svg id="{{article[1]}}" card-like-heart="{{article[1]}}" width="800px" height="800px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+            {% if user_likes|length == 0 %}
+                <path data-article-title="{{ article[1] }}" class="heart-svg" fill="#000000" d="M11.434 1a4.604 4.604 0 00-3.226 1.322L8 2.527l-.208-.205A4.589 4.589 0 004.566 1 4.589 4.589 0 001.34 2.322 4.5 4.5 0 000 5.522a4.5 4.5 0 001.34 3.2l6.133 6.061a.75.75 0 001.054 0l6.132-6.06a4.52 4.52 0 00.992-1.467 4.482 4.482 0 00-.992-4.934A4.604 4.604 0 0011.433 1z"/>
+            {% endif %}
             <path data-article-title="{{ article[1] }}" class="heart-svg" fill="#000000" d="M11.434 1a4.604 4.604 0 00-3.226 1.322L8 2.527l-.208-.205A4.589 4.589 0 004.566 1 4.589 4.589 0 001.34 2.322 4.5 4.5 0 000 5.522a4.5 4.5 0 001.34 3.2l6.133 6.061a.75.75 0 001.054 0l6.132-6.06a4.52 4.52 0 00.992-1.467 4.482 4.482 0 00-.992-4.934A4.604 4.604 0 0011.433 1z"/>
+            {% for like in user_likes  %}
+              {% if article[0] == like[0] %}
+                  <path data-article-title="{{ article[1] }}" class="heart-svg" fill="#e12929" d="M11.434 1a4.604 4.604 0 00-3.226 1.322L8 2.527l-.208-.205A4.589 4.589 0 004.566 1 4.589 4.589 0 001.34 2.322 4.5 4.5 0 000 5.522a4.5 4.5 0 001.34 3.2l6.133 6.061a.75.75 0 001.054 0l6.132-6.06a4.52 4.52 0 00.992-1.467 4.482 4.482 0 00-.992-4.934A4.604 4.604 0 0011.433 1z"/>
+              {% endif %}
+            {% endfor %}
           </svg>  
         </span>
         <span class="star-text evaluation-text" id="{{article[1]}}-total-likes">{{article[3]}}</span>
@@ -37,7 +45,7 @@
             </g>
           </svg>
         </span>
-        <span class="reviews-text evaluation-text">4,447</span>
+        <span class="reviews-text evaluation-text">{{ article[6] }}</span>
       </span>
 
       <!-- <span class="student evaluation">
@@ -69,7 +77,7 @@
     {% endif %}
 
     {% if show_comment_area %}
-      <form action="/submit_comment" method="POST">
+      <form action="/submit_comment" method="POST" id="form_comment">
         <input style="display: none;" type="text" value="{{article[1]}}" name="title"></input>
         <textarea class='autoExpand textarea-comment' name="comment" id="comment-text-area" rows='3' data-min-rows='3' placeholder='Digite aqui seu comentário'  maxlength="200" autofocus required></textarea>    
         <button class="button-send-comment submit-comment" data-article-title="{{article[1]}}" id="submit-comment" type="submit">Enviar</button>

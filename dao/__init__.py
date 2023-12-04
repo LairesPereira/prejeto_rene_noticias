@@ -13,6 +13,42 @@ def conectardb():
 
     return con
 
+def get_news_ID(title):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT id FROM noticia WHERE titulo = '{title}'"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        id = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return id[0][0]
+    conexao.close()
+    cur.close()
+
+def articles_user_like(user):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT noticia FROM curtida WHERE usuario = '{user}'"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        likes = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return likes
+    conexao.close()
+    cur.close()
+
 def random_profile_pic():
     image_path = f'static/avatars/avatar_{random.randint(1,5)}.jpg'
     with open(image_path, "rb") as image_file:
@@ -129,14 +165,34 @@ def create_user_db(name, password, email, isadm):
     
     return [user_already_exists, insert_result, user]
 
+def check_news_title_exists(title):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"SELECT * FROM noticia WHERE titulo = '{title}'"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        result = cur.fetchall()
+        conexao.close()
+        cur.close()
+        if len(result) > 0:
+            return True
+        else:
+            return False
+    return 
+
 def create_article_db(noticias, conexao):
     cur = conexao.cursor()
 
-    titulo, autor, curtidas, removida, corpo = noticias
+    titulo, autor, curtidas, removida, corpo, comentarios = noticias
 
-    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}')"
+    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo, comentarios) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}', '{comentarios}')"
     try:
-        cur.execute(sql, (titulo, autor, curtidas, removida, corpo))
+        cur.execute(sql, (titulo, autor, curtidas, removida, corpo, comentarios))
         sucess = True
 
     except psycopg2.IntegrityError:
@@ -203,7 +259,7 @@ def read_article_db(title):
     conexao = conectardb()
     cur = conexao.cursor()
 
-    sql = f"SELECT * FROM noticia WHERE titulo = '{title}' "
+    sql = f"SELECT * FROM noticia WHERE titulo = '{title}'"
 
     try:
         cur.execute(sql)
@@ -235,15 +291,77 @@ def delete_article_db(title, usuario):
     conexao.close()
     return sucess
 
-def like_count_DB(title, like_action):
+def check_like_exists(title, user, news_id):
     conexao = conectardb()
     cur = conexao.cursor()
 
-    sql_inc = f"UPDATE noticia SET curtidas = curtidas + 1 WHERE titulo = '{title}'"
-    sql_dec = f"UPDATE noticia SET curtidas = curtidas - 1 WHERE titulo = '{title}'"
+    query_check_like_exist = f"SELECT * FROM curtida WHERE usuario = '{user}' AND noticia = {news_id};"
 
     try:
-        if like_action == 'true':
+        cur.execute(query_check_like_exist)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        like_exists = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return like_exists
+    conexao.close()
+    cur.close()
+
+def get_total_like(news_id):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query_count = f"SELECT COUNT (noticia) FROM curtida WHERE noticia = {news_id}"
+    try:
+        cur.execute(query_count)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        result = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return result[0][0]
+    conexao.close()
+    cur.close()
+    return
+
+def update_total_like(title, news_id):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    total_likes = get_total_like(news_id)
+
+    query = f"UPDATE noticia SET curtidas = {total_likes} WHERE titulo = '{title}'" 
+    
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        conexao.commit()
+        conexao.close()
+        cur.close()
+        return
+    conexao.close()
+    cur.close()
+    return
+
+
+def like_count_DB(title, like_action, user):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    news_id = get_news_ID(title)
+    like_exists = check_like_exists(title, user, news_id)
+
+    sql_inc = f"INSERT INTO curtida (usuario, noticia) VALUES ('{user}', {news_id})"
+    sql_dec = f"DELETE FROM curtida WHERE usuario = '{user}' AND noticia = {news_id};"
+    
+    print(title, like_action, user, news_id)
+    try:
+        if len(like_exists) == 0:
             cur.execute(sql_inc)
         else:
             cur.execute(sql_dec)
@@ -252,6 +370,7 @@ def like_count_DB(title, like_action):
     else:
         conexao.commit()
         conexao.close()
+        update_total_like(title, news_id)
         return True
     return False
 
@@ -330,7 +449,7 @@ def inserir_mock():
     conexao = conectardb()
     pic = random_profile_pic()
     for i in range(len(noticias)):
-        tupla = (titulos_noticias[i], 'Laires', 0, False, noticias[i])
+        tupla = (titulos_noticias[i], 'Laires', 0, False, noticias[i], 0)
         create_article_db(tupla, conexao)
     
     conexao.close()
@@ -395,6 +514,23 @@ def get_last_comment_id():
         cur.close()
         conexao.close()
     return last_id
+
+def update_total_comment(title):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    query = f"UPDATE noticia SET comentarios = comentarios + 1 WHERE titulo = '{title}'"
+    print(query)
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        conexao.commit()
+        conexao.close()
+        cur.close()
+        return
+    return
 
 def submit_comment_DB(title, comment, user):
     conexao = conectardb()

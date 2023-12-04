@@ -39,7 +39,7 @@
         const hearts = document.querySelectorAll('.heart-svg');
         const comments = document.querySelectorAll('.comment-svg')
         const search = document.querySelector(".searchInput");
-
+    
         comments.forEach(function (card) {
             const articleId = card.getAttribute('data-article-title');
             card.addEventListener('click', function(){
@@ -49,19 +49,30 @@
 
         hearts.forEach(function (card) {
             const articleId = card.getAttribute('data-article-title');
-            console.log(articleId)
 
-            // Initial color
-            let like = false
+            var article = {{ articles|tojson|safe }};
+
+            var user_likes_array = {{ user_likes|tojson|safe }};
+            user_likes_array.flat()
             let currentColor = '#000000';
+            
+            // Initial color
+            article.forEach(element => {
+                if(articleId == element[1] && user_likes_array.flat().includes(element[0])){
+                    console.log(articleId, element[1], element[0], user_likes_array.flat(), user_likes_array.flat().includes(element[0]))
+                    currentColor = '#e12929'
+                }
+            });
+
+
+            let like = false
             card.addEventListener('click', function() { 
                 
                 currentColor = (currentColor === '#000000') ? '#e12929' : '#000000';
-                like = (like === false) ? true : false;
                 
                 likesCounter = parseInt(document.getElementById(`${articleId}-total-likes`).innerHTML)
 
-                if(like) {
+                if(currentColor == '#e12929') {
                     document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter + 1
                 } else {
                     document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter - 1

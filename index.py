@@ -81,7 +81,9 @@ def login():
     home_articles = get_articles_db()
 
     if 'usuario' in session and session['usuario'][1]:
-        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), adm_options=True)
+        likes = articles_user_like(get_user_logged())
+        print(likes)
+        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), adm_options=True, user_likes=likes)
 
     login = str(request.form.get('txt'))
     senha = str(request.form.get('pswd'))
@@ -92,7 +94,7 @@ def login():
 
         session['usuario'] = [login, is_adm]
         if is_adm:
-            return render_template('adm_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), adm_options=True)
+            return render_template('adm_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), adm_options=True, user_likes=articles_user_like(get_user_logged()))
         return render_template('usuario_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), show_more_btn=True )
         
     return render_template('login_page.html', login_fail=True)
@@ -118,7 +120,7 @@ def create_user():
         return render_template('login_page.html', sigun_up=False)
     if create[0] == False and create[1] == True and isadm == True:
         session['usuario'] = [name, isadm]
-        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, adm_options=True, profile_pic=profile_pics)
+        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, adm_options=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()))
     if create[1] and isadm == False:
         session['usuario'] = [name, isadm]
         return render_template('usuario_logado.html', articles=home_articles, profile_pic=profile_pics, show_more_btn=True)
@@ -137,8 +139,8 @@ def read_new():
     profile_pics = get_profile_pics(article)
     comments = get_news_comments(news_title)
     if session['usuario'][1]:
-        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True)
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics)
+        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_like(get_user_logged()))
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()))
 
 @app.route('/create_news', methods=['GET', 'POST'])
 def create_news():
@@ -148,12 +150,16 @@ def create_news():
         
         conexao = conectardb()
         news_info = (titulo, get_user_logged(), 0, False, texto)
+        
+        check_title_exists = check_news_title_exists(titulo)
+        print(check_title_exists)
+        if check_title_exists:
+            return render_template('create_news.html', adm_options=True, alert=True)
 
         create_article_db(news_info, conexao)
-
         return render_template('create_news.html', adm_options=True)
-    else: 
-        return render_template('create_news.html', adm_options=True)
+    return render_template('create_news.html', adm_options=True)
+    
 
 @app.route('/logOut', methods=['GET'])
 def logout():
@@ -210,24 +216,24 @@ def send_like():
     if 'usuario' in session:
         title = request.form.get('title')
         like = request.form.get('like')
-        like_insert = like_count_DB(title, like)
+        user = get_user_logged()
+        like_insert = like_count_DB(title, like, user)
         home_articles = get_articles_db()
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
 
 @app.route("/submit_comment", methods=['POST'])
-def submit_comment():
-
+def submit_comment():    
     title = request.form.get('title')
     comment = request.form.get('comment')
     user = get_user_logged()
 
     submit_comment_DB(title, comment, user)
-
+    update_total_comment(title)
     article = read_article_db(title)
     profile_pics = get_profile_pics(article)
     comments = get_news_comments(title)
     
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm())
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()))
 
 @app.route("/search", methods=["GET", "POST"])
 def search():

@@ -22,11 +22,16 @@
 				<form class="create-news-form" action="/create_news" method="post">
                     <div class="field">
                         <div class="field__head">
+                          {% if alert %}
+                            <p style="color: red">
+                              Notícia já existente!
+                            </p>
+                          {% endif %}
                           <input class="field__ttl" name="titulo" placeholder="Digite o título" for="textarea" required></input>
                         </div>
                         <div class="field__body">
                           <div class="textarea-box">
-                            <textarea name="textarea" name="txt" id="textarea" placeholder="Enter message" required></textarea>
+                            <textarea name="textarea" name="txt" id="textarea" placeholder="Enter message" required minlength="100"></textarea>
                           </div>
                         </div>
                       </div>

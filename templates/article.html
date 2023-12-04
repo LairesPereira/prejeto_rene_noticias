@@ -24,58 +24,30 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const hearts = document.querySelectorAll('.heart-svg')
-    // const submitButtons = document.querySelectorAll('.submit-comment')
-
-    // submitButtons.forEach(function (btn) {
-    //   const articleId = btn.getAttribute('data-article-title')
-    //   btn.addEventListener('click', function(e) {
-    //     e.preventDefault()
-        
-    //     comment = document.getElementById('comment-text-area').value
-    //     console.log(comment)
-
-    //     if(comment) {
-    //       path = window.location.origin + '/submit_comment'
-            
-    //       const data = new URLSearchParams();
-    //       data.append('comment', comment)
-    //       data.append('title', articleId)
-
-          
-        //   fetch('ignore', {
-        //       method: 'POST',
-        //       body: data,
-        //       headers: {
-        //           'Content-Type': 'application/x-www-form-urlencoded',
-        //       },
-        //   })
-        //   .then(response => {
-        //       // Lide com a resposta, se necessário
-        //       console.log(response);
-        //       // window.location.href = '/login'
-        //   })
-        //   .catch(error => {
-        //       // Lide com o erro, se necessário
-        //       console.error('Erro ao enviar a solicitação:', error);
-        //   });
-         
-
+    document.getElementById('form_comment').reset();
+    
 
     hearts.forEach(function (card) {
         const articleId = card.getAttribute('data-article-title');
-        console.log(articleId)
+        const article = {{ article|tojson|safe }};
+        var user_likes_array = {{ user_likes|tojson|safe }};
+        user_likes_array.flat()
+        let currentColor = '#000000';
+        let like = false
 
         // Initial color
-        let like = false
-        let currentColor = '#000000';
-        card.addEventListener('click', function() { 
 
+        if(articleId == article[1] && user_likes_array.flat().includes(article[0])){
+            currentColor = '#e12929'
+        }
+
+        card.addEventListener('click', function() {
             currentColor = (currentColor === '#000000') ? '#e12929' : '#000000';
             like = (like === false) ? true : false;
 
             likesCounter = parseInt(document.getElementById(`${articleId}-total-likes`).innerHTML)
 
-            if(like) {
+            if(currentColor == '#e12929') {
                 document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter + 1
             } else {
                 document.getElementById(`${articleId}-total-likes`).innerHTML = likesCounter - 1
