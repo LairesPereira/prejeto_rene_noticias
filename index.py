@@ -149,10 +149,10 @@ def create_news():
         texto = str(request.form.get('textarea'))
         
         conexao = conectardb()
-        news_info = (titulo, get_user_logged(), 0, False, texto)
+        news_info = (titulo, get_user_logged(), 0, False, texto, 0)
         
         check_title_exists = check_news_title_exists(titulo)
-        print(check_title_exists)
+
         if check_title_exists:
             return render_template('create_news.html', adm_options=True, alert=True)
 
@@ -240,7 +240,7 @@ def search():
     search = request.form.get('search_news')
     match = search_articles_DB(search)
     profile_pics = get_profile_pics(match)
-    return render_template('adm_logado.html', articles=match, show_more_btn=True, profile_pic=profile_pics, adm_options=user_isadm() )
+    return render_template('adm_logado.html', articles=match, show_more_btn=True, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()))
 
 @app.route("/user_profile", methods=["GET", "POST"])
 def teste():
