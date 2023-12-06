@@ -66,8 +66,6 @@
         </span>
       </span> 
     
-
-
     {% if full_article %}
       <span class="desc">
         <p>{{article[5]}}</p>
@@ -84,6 +82,15 @@
         <textarea class='autoExpand textarea-comment' name="comment" id="comment-text-area" rows='3' data-min-rows='3' placeholder='Digite aqui seu comentário'  maxlength="200" autofocus required></textarea>    
         <button class="button-send-comment submit-comment" data-article-title="{{article[1]}}" id="submit-comment" type="submit">Enviar</button>
       </form>
+    {% endif %}
+
+    {% if show_likes %}
+        <h4>Curtidas: </h4>
+          <div class="show_likes_container">
+            <p class="list-group-item">{{ show_likes }}</p>
+          </div>
+          <hr class="solid">
+
     {% endif %}
 
     {% if show_comments %}

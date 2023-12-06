@@ -7,6 +7,7 @@ from warnin_colors import text_colors
 from PIL import Image
 from io import BytesIO
 from parse_articles import parse_articles_to_download
+from downloadPDF import text_to_pdf
 from random import randint
 import os
 import base64
@@ -138,8 +139,14 @@ def read_new():
     article = read_article_db(news_title)
     profile_pics = get_profile_pics(article)
     comments = get_news_comments(news_title)
+    likes_tuple = get_news_likes(news_title)
+    likes_strings = []
+    for like in likes_tuple:
+        likes_strings.append(like[0])
+    likes = ", ".join(likes_strings)
+
     if session['usuario'][1]:
-        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_like(get_user_logged()))
+        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_like(get_user_logged()), show_likes=likes)
     return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()))
 
 @app.route('/create_news', methods=['GET', 'POST'])
@@ -232,8 +239,15 @@ def submit_comment():
     article = read_article_db(title)
     profile_pics = get_profile_pics(article)
     comments = get_news_comments(title)
+
+    likes_tuple = get_news_likes(title)
+    likes_strings = []
+    for like in likes_tuple:
+        likes_strings.append(like[0])
+    likes = ", ".join(likes_strings)
+
     
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()))
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()), show_likes=likes)
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -264,18 +278,31 @@ def upload_profile_pic():
 def download_news():
     user = get_user_logged()
     articles = get_user_articles(user)
-
     parsed_article_path = parse_articles_to_download(user, articles)
-    
+    file = open(parsed_article_path)
+    text = file.read()
+    file.close()
+    text_to_pdf(text, f'{user}.pdf')
+
     # Deletar arquivos após serem enviados para downlad
     @after_this_request
     def remove_file(response):
         try:
             os.remove(parsed_article_path)
+            os.remove(f'{user}.pdf')
         except Exception as error:
             print(error)
         return response
-    return send_file(parsed_article_path, as_attachment=True)
+    return send_file(f'{user}.pdf', as_attachment=True)
+
+@app.route('/update_profile', methods=["POST"])
+def update_profile():
+    full_name = request.form.get('full-name')
+    city = request.form.get('city')
+    phone = request.form.get('phone')
+    birthday = request.form.get('birthday')
+
+    update_profile_BD(get_user_logged(), full_name, city, phone, birthday)
 
 
 

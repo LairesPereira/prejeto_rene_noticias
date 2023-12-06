@@ -147,3 +147,9 @@ textarea-comment:focus {
   margin: 0;
 }
 
+
+.show_likes_container {
+  max-height: 150px;
+  overflow: overlay;
+}
+

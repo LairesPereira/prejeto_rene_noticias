@@ -45,7 +45,7 @@
             <div class="card mb-4">
                 <div class="card-header">Detalhes do Perfil</div>
                 <div class="card-body">
-                    <form>
+                    <form action="/update_profile" method="POST">
                         <!-- Form Group (username)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Nome de Usuário</label>
@@ -56,7 +56,11 @@
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputFirstName">Nome Completo</label>
-                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="{{user[2]}}">
+                                {% if user[2]!= None %}
+                                    <input class="form-control" name="full-name" id="inputFirstName" type="text" placeholder="Enter your first name" value="{{user[2]}}" required>
+                                {% else %}
+                                    <input class="form-control" name="full-name" id="inputFirstName" type="text" placeholder="Enter your first name" required>
+                                {% endif %}
                             </div>
                         </div>
                         <!-- Form Row        -->
@@ -64,7 +68,11 @@
                             <!-- Form Group (location)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputLocation">Local</label>
-                                <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="{{user[8]}}">
+                                {% if user[8]!= None %}
+                                    <input class="form-control" name="city" id="inputLocation" type="text" placeholder="Enter your location" value="{{user[8]}}" required>
+                                {% else %}
+                                    <input class="form-control" name="city" id="inputLocation" type="text" placeholder="Enter your location" required>
+                                {% endif %}
                             </div>
                         </div>
                         <!-- Form Group (email address)-->
@@ -77,16 +85,24 @@
                             <!-- Form Group (phone number)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputPhone">Telefone</label>
-                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="{{user[9]}}">
+                                {% if user[9] != None %}
+                                    <input class="form-control" name="phone" id="inputPhone" type="tel" placeholder="Enter your phone number" value="{{user[9]}}" required>
+                                {% else %}
+                                    <input class="form-control" name="phone" id="inputPhone" type="tel" placeholder="Enter your phone number" required>
+                                {% endif %}
                             </div>
                             <!-- Form Group (birthday)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputBirthday">Data de Nascimento</label>
-                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Data de Nascimento" value="{{user[10]}}">
+                                {% if user[10] != None %}
+                                    <input class="form-control" name="birthday" id="inputBirthday" type="text" name="birthday" placeholder="Data de Nascimento" value="{{user[10]}}" required>
+                                {% else %}
+                                    <input class="form-control" name="birthday" id="inputBirthday" type="text" name="birthday" placeholder="Data de Nascimento" required>
+                                {% endif %}
                             </div>
                         </div>
                         <!-- Save changes button-->
-                        <button class="btn btn-primary" type="button">Salvar</button>
+                        <button class="btn btn-primary" type="submit">Salvar</button>
                     </form>
                     <div class="row gx-3 mb-3 save-news-container">
                         {% if adm_options %}

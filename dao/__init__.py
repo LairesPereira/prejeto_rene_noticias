@@ -598,7 +598,42 @@ def search_articles_DB(search):
     conexao.close()
     cur.close()
 
+def update_profile_BD(user, full_name, city, phone, birthday):
+    conexao = conectardb()
+    cur = conexao.cursor()
 
+    query = f"UPDATE usuario SET nome_completo = '{full_name}', cidade = '{city}', telefone = '{phone}', nascimento = '{birthday}' WHERE nome_usuario = '{user}'"
+
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        conexao.commit()
+    conexao.close()
+    cur.close()
+    return
+
+def get_news_likes(title):
+    conexao = conectardb()
+    cur= conexao.cursor()
+
+    news_id = get_news_ID(title)
+    query = f"SELECT usuario FROM curtida WHERE noticia = {news_id}"
+
+    try:
+        cur.execute(query)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+    else:
+        likes = cur.fetchall()
+        conexao.close()
+        cur.close()
+        return likes
+    conexao.close()
+    cur.close()
+    return
 
 # query_teste()
 

@@ -1,13 +1,34 @@
 blinker
 click
+dnspython
+email-validator
 Flask
 Flask-Login
+fpdf
+gunicorn
+idna
 importlib-metadata
 itsdangerous
 Jinja2
 MarkupSafe
+packaging
+Pillow
 psycopg2-binary
+python-decouple
 Werkzeug
 zipp
-gunicorn
-python-decouple
+
+
+# blinker
+# click
+# Flask
+# Flask-Login
+# importlib-metadata
+# itsdangerous
+# Jinja2
+# MarkupSafe
+# psycopg2-binary
+# Werkzeug
+# zipp
+# gunicorn
+# python-decouple
