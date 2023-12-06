@@ -162,8 +162,9 @@ def create_user_db(name, password, email, isadm):
 
         conexao.close()
         cur.close()
+        print(user_already_exists, insert_result,)
         return [user_already_exists, insert_result, user]
-    
+    print(user_already_exists, insert_result)
     return [user_already_exists, insert_result, user]
 
 def check_news_title_exists(title):
@@ -186,7 +187,8 @@ def check_news_title_exists(title):
             return False
     return 
 
-def create_article_db(noticias, conexao):
+def create_article_db(noticias):
+    conexao = conectardb()
     cur = conexao.cursor()
     now = datetime.now()
     date = now.strftime("%d/%m/%Y")
@@ -642,10 +644,3 @@ def get_news_likes(title):
 # deletar_tudo()
 # inserir_mock()
 
-
-# querys uteis
-# -- select * from noticia
-# -- UPDATE noticia SET removida = False WHERE titulo = 'App Inovador';
-# SELECT * FROM noticia WHERE autor = 'Laires';
-# -- SELECT * FROM noticia WHERE titulo = 'Testeteste';
-# -- DELETE FROM noticia WHERE titulo = 'Testeteste';

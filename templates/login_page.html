@@ -11,12 +11,12 @@
 	<div class="main">  	
 		{% if login_fail %}
 			<div class="error-message">
-				Login incorreto
+				{{ sigun_up }}
 			</div>
 		{% endif %}
-		{% if sigun_up == False %}
+		{% if sigun_up %}
             <div class="error-message">
-                Usuario ou email já cadastrado
+				{{ sigun_up }}
             </div>
         {% endif %}
 		

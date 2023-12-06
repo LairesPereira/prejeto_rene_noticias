@@ -31,10 +31,3 @@ def text_to_pdf(text, filepath):
             pdf.cell(0, fontsize_mm, wrap, ln=1)
 
     pdf.output(filepath, 'F')
-
-# input_filepath = 'texto.txt'
-# output_filepath = 'output.pdf'
-# file = open(input_filepath)
-# text = file.read()
-# file.close()
-# text_to_pdf(text, output_filepath)
