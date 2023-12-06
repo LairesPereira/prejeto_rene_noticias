@@ -191,10 +191,10 @@ def create_article_db(noticias, conexao):
     now = datetime.now()
     date = now.strftime("%d/%m/%Y")
     titulo, autor, curtidas, removida, corpo, comentarios = noticias
-
-    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo, comentarios, data_criacao) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}', '{comentarios}', '{date}')"
+    # "INSERT INTO minha_tabela (meu_campo_texto) VALUES (?)", (minha_string,)
+    sql = "INSERT INTO noticia (titulo, autor, curtidas, removida, corpo, comentarios, data_criacao) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     try:
-        cur.execute(sql, (titulo, autor, curtidas, removida, corpo, comentarios, date))
+        cur.execute(sql, (titulo.strip(), autor, curtidas, removida, corpo, comentarios, date))
         sucess = True
 
     except psycopg2.IntegrityError:
