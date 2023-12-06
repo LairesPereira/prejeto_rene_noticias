@@ -83,8 +83,12 @@ def login():
 
     if 'usuario' in session and session['usuario'][1]:
         likes = articles_user_like(get_user_logged())
-        print(likes)
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), adm_options=True, user_likes=likes)
+
+    if 'usuario' in session and user_isadm() == False:
+        likes = articles_user_like(get_user_logged())
+        print(likes)
+        return render_template('usuario_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), user_likes=likes)       
 
     login = str(request.form.get('txt'))
     senha = str(request.form.get('pswd'))
@@ -301,8 +305,17 @@ def update_profile():
     city = request.form.get('city')
     phone = request.form.get('phone')
     birthday = request.form.get('birthday')
-
+    home_articles = get_articles_db()
     update_profile_BD(get_user_logged(), full_name, city, phone, birthday)
+
+    if 'usuario' in session and session['usuario'][1]:
+        likes = articles_user_like(get_user_logged())
+        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), adm_options=True, user_likes=likes)
+
+    if 'usuario' in session and user_isadm() == False:
+        likes = articles_user_like(get_user_logged())
+        print(likes)
+        return render_template('usuario_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), user_likes=likes)       
 
 
 
