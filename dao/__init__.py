@@ -1,3 +1,4 @@
+from datetime import datetime
 import psycopg2
 from decouple import config
 import random
@@ -187,12 +188,13 @@ def check_news_title_exists(title):
 
 def create_article_db(noticias, conexao):
     cur = conexao.cursor()
-
+    now = datetime.now()
+    date = now.strftime("%d/%m/%Y")
     titulo, autor, curtidas, removida, corpo, comentarios = noticias
 
-    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo, comentarios) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}', '{comentarios}')"
+    sql = f"INSERT INTO noticia (titulo, autor, curtidas, removida, corpo, comentarios, data_criacao) VALUES ('{titulo.strip()}', '{autor}', '{curtidas}', '{removida}', '{corpo}', '{comentarios}', '{date}')"
     try:
-        cur.execute(sql, (titulo, autor, curtidas, removida, corpo, comentarios))
+        cur.execute(sql, (titulo, autor, curtidas, removida, corpo, comentarios, date))
         sucess = True
 
     except psycopg2.IntegrityError:

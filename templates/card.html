@@ -69,6 +69,9 @@
     {% if full_article %}
       <span class="desc">
         <p>{{article[5]}}</p>
+        {% if show_creation_date %}
+          <p>{{ article[7] }}</p>
+        {% endif %}
       </span>
     {% else %}
       <span class="desc">

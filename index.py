@@ -150,8 +150,8 @@ def read_new():
     likes = ", ".join(likes_strings)
 
     if session['usuario'][1]:
-        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_like(get_user_logged()), show_likes=likes)
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()))
+        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_like(get_user_logged()), show_likes=likes, show_creation_date=True)
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()), show_creation_date=True)
 
 @app.route('/create_news', methods=['GET', 'POST'])
 def create_news():
@@ -251,7 +251,7 @@ def submit_comment():
     likes = ", ".join(likes_strings)
 
     
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()), show_likes=likes)
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()), show_likes=likes, show_creation_date=True)
 
 @app.route("/search", methods=["GET", "POST"])
 def search():

@@ -65,21 +65,30 @@
 
 #   # The exception message is human-readable explanation of why it's
 #   # not a valid (or deliverable) email address.
-#  
-import base64
-import random
+# #  
+# import base64
+# import random
 
-def image_to_base64(image_path):
-    with open(image_path, "rb") as image_file:
-        # Encode the image in base64
-        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
-    return encoded_image
+# def image_to_base64(image_path):
+#     with open(image_path, "rb") as image_file:
+#         # Encode the image in base64
+#         encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+#     return encoded_image
 
-# Replace 'path/to/your/image.jpg' with the actual path to your JPG image file
-image_path = f'static/avatars/avatar_{random.randint(1,5)}.jpg'
+# # Replace 'path/to/your/image.jpg' with the actual path to your JPG image file
+# image_path = f'static/avatars/avatar_{random.randint(1,5)}.jpg'
 
-# Convert the image to base64
-base64_image = image_to_base64(image_path)
+# # Convert the image to base64
+# base64_image = image_to_base64(image_path)
 
-# Print or use the base64 representation of the image
-print(base64_image)
+# # Print or use the base64 representation of the image
+# print(base64_image)
+
+from datetime import datetime
+
+def get_date():
+    now = datetime.now()
+    date = now.strftime("%d/%m/%Y")
+    print(date)
+
+get_date()
