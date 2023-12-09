@@ -1,7 +1,6 @@
 from flask import session
 
 def get_user_logged():
-    print('teste session')
     if session['usuario']:
         return session['usuario'][0]
     return False

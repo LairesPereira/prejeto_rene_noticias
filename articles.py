@@ -14,10 +14,13 @@ def read_new():
     news_title = request.args.get('news')
     
     # load page content
-    article = read_article_db(news_title)
-    profile_pics = get_profile_pics(article)
-    comments = get_news_comments(news_title)
-    likes_tuple = get_news_likes(news_title)
+    conexao = conectardb()
+    article = read_article_db(news_title, conexao)
+    profile_pics = get_profile_pics(article, conexao)
+    comments = get_news_comments(news_title, conexao)
+    likes_tuple = get_news_likes(news_title, conexao)
+    articles_user_likes = articles_user_like(get_user_logged(), conexao)
+    conexao.close()
     
     # parse news likes to one list of strings
     likes_strings = []
@@ -26,8 +29,8 @@ def read_new():
     likes = ", ".join(likes_strings)
 
     if user_isadm():
-        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_like(get_user_logged()), show_likes=likes, show_creation_date=True)
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()), show_creation_date=True)
+        return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=True, user_likes=articles_user_likes, show_likes=likes, show_creation_date=True)
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, profile_pic=profile_pics, user_likes=articles_user_likes, show_creation_date=True)
 
 # enviar de volta para index
 @usernews_blueprint.route('')

@@ -85,7 +85,7 @@
                 data.append('like', like.toString())
                 data.append('title', articleId)
 
-                fetch('send_like', {
+                fetch('/send_like', {
                     method: 'POST',
                     body: data,
                     headers: {

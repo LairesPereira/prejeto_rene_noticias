@@ -14,8 +14,6 @@ app.secret_key = config("SECRET_KEY")
 
 # auth routes
 app.register_blueprint(auth_blueprint, url_prefix='/login')
-app.register_blueprint(signup_blueprint, url_prefix='/sign_up')
-app.register_blueprint(logout_bluprint, url_prefix='/logOut')
 
 # articles routes
 app.register_blueprint(getnews_blueprint, url_prefix='/login/get_news/')
@@ -27,6 +25,8 @@ app.register_blueprint(updatenewspage_sendupdate, url_prefix='/update_news_page/
 # user routes
 app.register_blueprint(uploadprofilepic, url_prefix='/upload_profile_pic')
 app.register_blueprint(updateprofile, url_prefix='/update_profile')
+app.register_blueprint(signup_blueprint, url_prefix='/sign_up')
+app.register_blueprint(logout_bluprint, url_prefix='/logOut')
 
 # interactions routes
 app.register_blueprint(sendlike_blueprint, url_prefix='/send_like')
@@ -70,7 +70,7 @@ def teste():
     
     # recieve a base64 string that represents user profile picture
     image_base64 = user_info[0][7] 
-    
+    # image_base64 = 'laires'
     return render_template('user_profile.html', user=user_info[0], profile_pic=image_base64, adm_options=user_isadm())
 
 if __name__ == "__main__":

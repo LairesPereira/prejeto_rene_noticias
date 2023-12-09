@@ -19,8 +19,10 @@ def send_like():
         like = request.form.get('like')
         user = get_user_logged()
         
-        like_count_DB(title, like, user)
-        home_articles = get_articles_db()
+        conexao = conectardb()
+
+        like_count_DB(title, like, user, conexao)
+        home_articles = get_articles_db(conexao)
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
     
 @submitcomment_blueprint.route('', methods=["POST"])
