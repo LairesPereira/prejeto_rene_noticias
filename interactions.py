@@ -23,6 +23,7 @@ def send_like():
 
         like_count_DB(title, like, user, conexao)
         home_articles = get_articles_db(conexao)
+        conexao.close()
         return render_template('adm_logado.html', articles=home_articles, show_more_btn=True)
     
 @submitcomment_blueprint.route('', methods=["POST"])
@@ -32,14 +33,17 @@ def submit_comment():
     
     user = get_user_logged()
 
-    submit_comment_DB(title, comment, user)
-    update_total_comment(title)
+    conexao = conectardb()
+
+    submit_comment_DB(title, comment, user, conexao)
+    update_total_comment(title, conexao)
 
     # load article content to display it on full article page    
-    article = read_article_db(title)
-    profile_pics = get_profile_pics(article)    
-    comments = get_news_comments(title)
-    likes_tuple = get_news_likes(title)
+    article = read_article_db(title, conexao)
+    profile_pics = get_profile_pics(article, conexao)    
+    comments = get_news_comments(title, conexao)
+    likes_tuple = get_news_likes(title, conexao)
+    articles_user_likes = articles_user_like(get_user_logged(), conexao)
 
     # We make a list with the names of users who liked the current article
     likes_strings = []
@@ -47,8 +51,8 @@ def submit_comment():
         likes_strings.append(like[0])
     likes = ", ".join(likes_strings)
 
-    
-    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()), show_likes=likes, show_creation_date=True)
+    close_conection(conexao)
+    return render_template('article.html', article=article[0], full_article=True, usuario=get_user_logged(), show_comment_area=True, show_comments=comments, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_likes, show_likes=likes, show_creation_date=True)
 
 @downloadnews_blueprint.route('', methods=["GET"])
 def download_news():

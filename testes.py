@@ -84,11 +84,55 @@
 # # Print or use the base64 representation of the image
 # print(base64_image)
 
-from datetime import datetime
+# from datetime import datetime
 
-def get_date():
-    now = datetime.now()
-    date = now.strftime("%d/%m/%Y")
-    print(date)
+# def get_date():
+#     now = datetime.now()
+#     date = now.strftime("%d/%m/%Y")
+#     print(date)
 
-get_date()
+# get_date()
+
+# from PIL import Image
+# import os
+
+# image = Image.open('static/avatars/IMG_9684.JPG')
+
+# width, height = image.size
+# new_size = (width//2, height//2)
+# resized_image = image.resize(new_size)
+
+# resized_image.save('compressed_image.jpg', optimize=True, quality=50)
+
+# original_size = os.path.getsize('image.jpg')
+# compressed_size = os.path.getsize('compressed_image.jpg')
+
+# print("Original Size: ", original_size)
+# print("Compressed Size: ", compressed_size)
+
+import subprocess
+import time
+from dao import *
+
+while True:
+    conexao = conectardb()
+    cur = conexao.cursor()
+    while True:
+        try:
+            cur.execute('SELECT * FROM pg_stat_activity')
+        except psycopg2.IntegrityError:
+            conexao.rollback()
+            break
+        else:
+            results = cur.fetchall()
+            for result in results:
+                print('datname: ', result[1])
+                print('username: ', result[5])
+                print('appname: ', result[6])
+                print('clientaddr: ', result[7])
+                print('state: ', result[16])
+                print('*' * 100)
+            time.sleep(1)  # intervalo de 5 segundos 
+
+    conexao.close()
+    cur.close()

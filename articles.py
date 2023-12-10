@@ -12,7 +12,6 @@ updatenewspage_sendupdate = Blueprint('updatenewspage_sendupdate', __name__)
 @getnews_blueprint.route('', methods=['GET'])
 def read_new():
     news_title = request.args.get('news')
-    
     # load page content
     conexao = conectardb()
     article = read_article_db(news_title, conexao)
@@ -36,8 +35,10 @@ def read_new():
 @usernews_blueprint.route('')
 def update_news_page():
     if get_user_logged() and user_isadm():
-        articles = get_user_articles(get_user_logged())
-        profile_pics = get_profile_pics(articles)
+        conexao = conectardb()
+        articles = get_user_articles(get_user_logged(), conexao)
+        profile_pics = get_profile_pics(articles, conexao)
+        close_conection(conexao)
         return render_template('user_news.html', articles=articles, update_delete=True, profile_pic=profile_pics, adm_options=True)
     
 @createnews_blueprint.route('', methods=['GET', 'POST'])
@@ -45,17 +46,22 @@ def create_news():
     if request.method == 'POST':
         titulo = str(request.form.get('titulo'))
         texto = str(request.form.get('textarea'))
+        
+        conexao = conectardb()
+        check_title_exists = check_news_title_exists(titulo, conexao)
 
-        check_title_exists = check_news_title_exists(titulo)
-
+        bad_chars = [';', ':', '!', "*", "'", '#']
+        titulo = ''.join(i for i in titulo if not i in bad_chars)
         # shapes the article info
         news_info = (titulo, get_user_logged(), 0, False, texto, 0)
                 
         # dont allow create article if title already exists
         if check_title_exists:
+            close_conection(conexao)
             return render_template('create_news.html', adm_options=True, alert=True)
     
-        create_article_db(news_info)
+        create_article_db(news_info, conexao)
+        close_conection(conexao)
         return render_template('create_news.html', adm_options=True)
     
     # renders the same page in case of any problem with request
@@ -65,11 +71,13 @@ def create_news():
 def delete_news():
     news_title = request.args.get('news')
 
+    conexao = conectardb()
     # delete article only if belongs to the user in session
-    delete = delete_article_db(news_title, get_user_logged())
+    delete = delete_article_db(news_title, get_user_logged(), conexao)
 
     if delete:
-        articles = get_user_articles(get_user_logged())
+        articles = get_user_articles(get_user_logged(), conexao)
+        close_conection(conexao)
         return redirect('/delete_news_page')
 
 @updatenewspage_sendupdate.route('', methods=["POST"])
@@ -80,9 +88,9 @@ def send_update():
         # new title and content for update
         title = request.form.get('news')
         content = request.form.get('content')
-
-        update = send_update_DB(get_user_logged(), old_title, title, content)
+        conexao = conectardb()
+        update = send_update_DB(get_user_logged(), old_title, title, content, conexao)
         
         if update:
-            articles = get_article(title, get_user_logged())
-            return redirect('user_news.html', articles=articles)
+            close_conection(conexao)
+            return redirect('user_news.html')

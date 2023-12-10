@@ -36,22 +36,25 @@ app.register_blueprint(downloadnews_blueprint, url_prefix='/download_news')
 # main pages
 @app.route('/')
 def home():
-    home_articles = get_articles_db()
-    profile_pics = get_profile_pics(home_articles)
+    conexao = conectardb()
+    home_articles = get_articles_db(conexao)
+    profile_pics = get_profile_pics(home_articles, conexao)
+    close_conection(conexao)
     return render_template('home.html', articles=home_articles, profile_pic=profile_pics)
 
 @app.route('/delete_news_page', methods=['GET', 'DELETE'])
 def delete_news_page():
     if get_user_logged() and user_isadm():
-        articles = get_user_articles(get_user_logged())
-        profile_pics = get_profile_pics(articles)
+        conexao = conectardb()
+        articles = get_user_articles(get_user_logged(), conexao)
+        profile_pics = get_profile_pics(articles, conexao)
+        close_conection(conexao)
         return render_template('user_news.html', articles=articles, update_delete=True, profile_pic=profile_pics, adm_options=True)
 
 @app.route('/update_news_page/', methods=['GET', 'POST'])
 def update_news(): 
     if get_user_logged():
         title = request.args.get('news')
-
         article = get_article(title, get_user_logged())
         return render_template('update_news_page.html', article=article[0])
     
@@ -59,9 +62,12 @@ def update_news():
 def search():
     search = request.form.get('search_news')
     # find all articles that match with the search request from user
-    match = search_articles_DB(search)
-    profile_pics = get_profile_pics(match)
-    return render_template('adm_logado.html', articles=match, show_more_btn=True, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_like(get_user_logged()))
+    conexao = conectardb()
+    match = search_articles_DB(search, conexao)
+    profile_pics = get_profile_pics(match, conexao)
+    articles_user_likes = articles_user_like(get_user_logged(), conexao)
+    conexao.close()
+    return render_template('adm_logado.html', articles=match, show_more_btn=True, profile_pic=profile_pics, adm_options=user_isadm(), user_likes=articles_user_likes)
 
 @app.route("/user_profile", methods=["GET", "POST"])
 def teste():

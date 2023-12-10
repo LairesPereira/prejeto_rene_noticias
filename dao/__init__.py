@@ -15,6 +15,13 @@ def conectardb():
 
     return con
 
+def close_conection(conexao):
+    print('Fechando conexao')
+    if conexao:
+        conexao.close()
+        return
+    return
+
 def get_news_ID(title, conexao=None):
     print('get news id')
     if not conexao:
@@ -112,9 +119,10 @@ def get_news_id_by_title(title, conexao=None):
     
     return id[0][0]
 
-def get_users(login, pswd): 
+def get_users(login, pswd, conexao=None): 
     print('get users')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     query = f"SELECT * FROM usuario WHERE nome_usuario = '{login}' AND senha = '{pswd}'"
@@ -125,13 +133,13 @@ def get_users(login, pswd):
         conexao.rollback()
     else:
         user = cur.fetchall()
-        conexao.close()
-        
+         
     return user
 
-def create_user_db(name, password, email, isadm):
+def create_user_db(name, password, email, isadm, conexao=None):
     print('create user db')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
     
     query_check_email_exists= f"SELECT * FROM usuario WHERE nome_usuario = '{name}' OR email = '{email}';"
@@ -162,14 +170,13 @@ def create_user_db(name, password, email, isadm):
             conexao.commit()
             insert_result = True
 
-        conexao.close()
-        cur.close()
         return [user_already_exists, insert_result, user]
     return [user_already_exists, insert_result, user]
 
-def check_news_title_exists(title):
+def check_news_title_exists(title, conexao=None):
     print('check news title exists')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     query = f"SELECT * FROM noticia WHERE titulo = '{title}'"
@@ -180,18 +187,18 @@ def check_news_title_exists(title):
         conexao.rollback()
     else:
         result = cur.fetchall()
-        conexao.close()
-        cur.close()
         if len(result) > 0:
             return True
         else:
             return False
     return 
 
-def create_article_db(noticias):
+def create_article_db(noticias, conexao=None):
     print('create article db') 
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
+
     now = datetime.now()
     date = now.strftime("%d/%m/%Y")
     titulo, autor, curtidas, removida, corpo, comentarios = noticias
@@ -200,18 +207,17 @@ def create_article_db(noticias):
     try:
         cur.execute(sql, (titulo.strip(), autor, curtidas, removida, corpo, comentarios, date))
         sucess = True
-
     except psycopg2.IntegrityError:
         conexao.rollback()
         sucess = False
-
     else:
         conexao.commit()
     return sucess
 
-def get_user_articles(user):
+def get_user_articles(user, conexao=None):
     print('get user articles')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     sql = f"SELECT * FROM noticia WHERE autor = '{user}' AND removida = false"
@@ -223,8 +229,6 @@ def get_user_articles(user):
     else:
         user_articles = cur.fetchall()
         return user_articles
-    
-    conexao.close()
     return
 
 def get_articles_db(conexao=None):
@@ -243,9 +247,10 @@ def get_articles_db(conexao=None):
         articles = cur.fetchall()
     return articles
 
-def get_article(title, user):
+def get_article(title, user, conexao=None):
     print('get article')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     sql = f"SELECT * FROM noticia WHERE titulo = '{title}' and autor = '{user}'"
@@ -253,15 +258,11 @@ def get_article(title, user):
     article =[]
     try:
         cur.execute(sql)
-
     except psycopg2.IntegrityError:
         conexao.rollback()
     else:
         article = cur.fetchall()
-        conexao.close()
         return article
-
-    conexao.close()
     return 
 
 def read_article_db(title, conexao=None):
@@ -271,7 +272,7 @@ def read_article_db(title, conexao=None):
     
     cur = conexao.cursor()
 
-    sql = f"SELECT * FROM noticia WHERE titulo = '{title}'"
+    sql = f"SELECT * FROM noticia WHERE titulo ilike '%{title}%'"
 
     try:
         cur.execute(sql)
@@ -283,9 +284,10 @@ def read_article_db(title, conexao=None):
     
     return article
 
-def delete_article_db(title, usuario):
+def delete_article_db(title, usuario, conexao):
     print('delete article db')    
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     sql = f"UPDATE noticia SET removida = True WHERE titulo = '{title}' AND autor = '{usuario}'"
@@ -298,8 +300,6 @@ def delete_article_db(title, usuario):
     else:
         sucess = True
         conexao.commit()
-
-    conexao.close()
     return sucess
 
 def check_like_exists(title, user, news_id, conexao=None):
@@ -422,9 +422,10 @@ def get_profile_pic_DB(user_name, string:None, conexao=None):
         return bin_pic
     return
 
-def send_update_DB(usuario, old_title, news_title, content):
+def send_update_DB(usuario, old_title, news_title, content, conexao=None):
     print('send update db')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     sql = f"UPDATE noticia SET titulo = '{news_title}', corpo = '{content}' WHERE autor = '{usuario}' and titulo = '{old_title}'"
@@ -435,7 +436,6 @@ def send_update_DB(usuario, old_title, news_title, content):
         conexao.rollback()
     else:
         conexao.commit()
-        conexao.close()
         return True
     return False
 
@@ -458,9 +458,10 @@ def get_last_comment_id():
         conexao.close()
     return last_id
 
-def update_total_comment(title):
+def update_total_comment(title, conexao=None):
     print('update total comment')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     query = f"UPDATE noticia SET comentarios = comentarios + 1 WHERE titulo = '{title}'"
@@ -470,17 +471,16 @@ def update_total_comment(title):
         conexao.rollback()
     else:
         conexao.commit()
-        conexao.close()
-        cur.close()
         return
     return
 
-def submit_comment_DB(title, comment, user):
-    conexao = conectardb()
+def submit_comment_DB(title, comment, user, conexao=None):
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
-    id = get_news_id_by_title(title)
-    last_comment_id = get_last_comment_id()
+    id = get_news_id_by_title(title, conexao)
+    # last_comment_id = get_last_comment_id()
 
     sql = f"INSERT INTO comentario (id, comentario, autor) VALUES ({id}, '{comment}', '{user}')"
 
@@ -490,7 +490,6 @@ def submit_comment_DB(title, comment, user):
         conexao.rollback()
     else:
         conexao.commit()
-        conexao.close()
 
 def get_news_comments(title, conexao=None):
     print('get news comments')
@@ -524,9 +523,10 @@ def upload_profile_pic_DB(user, image_base64):
         conexao.commit()
 
 
-def search_articles_DB(search):
+def search_articles_DB(search, conexao=None):
     print('search articles db')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     query = f"SELECT * FROM noticia WHERE titulo ilike '%{search}%' or corpo ilike '%{search}%'"
@@ -537,15 +537,13 @@ def search_articles_DB(search):
         conexao.rollback()
     else: 
         fetch = cur.fetchall()
-        conexao.close()
-        cur.close()
         return fetch
-    conexao.close()
-    cur.close()
 
-def update_profile_BD(user, full_name, city, phone, birthday):
+
+def update_profile_BD(user, full_name, city, phone, birthday, conexao=None):
     print('update profile db')
-    conexao = conectardb()
+    if not conexao:
+        conexao = conectardb()
     cur = conexao.cursor()
 
     query = f"UPDATE usuario SET nome_completo = '{full_name}', cidade = '{city}', telefone = '{phone}', nascimento = '{birthday}' WHERE nome_usuario = '{user}'"
@@ -556,8 +554,6 @@ def update_profile_BD(user, full_name, city, phone, birthday):
         conexao.rollback()
     else:
         conexao.commit()
-    conexao.close()
-    cur.close()
     return
 
 def get_news_likes(title, conexao=None):

@@ -10,28 +10,41 @@ logout_bluprint = Blueprint('logut', __name__)
 
 @auth_blueprint.route('/', methods=["GET", "POST"])
 def login():
-    home_articles = get_articles_db()
+    conexao = conectardb()
+    home_articles = get_articles_db(conexao)
 
     if 'usuario' in session and user_isadm():
-        likes = articles_user_like(get_user_logged())
-        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), adm_options=True, user_likes=likes)
+        likes = articles_user_like(get_user_logged(), conexao)
+        profile_pics = get_profile_pics(home_articles, conexao)
+        close_conection(conexao)
+        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, profile_pic=profile_pics, adm_options=True, user_likes=likes)
 
     if 'usuario' in session and user_isadm() == False:
         likes = articles_user_like(get_user_logged())
+        close_conection(conexao)
         return render_template('usuario_logado.html', articles=home_articles, show_more_btn=True, profile_pic=get_profile_pics(home_articles), user_likes=likes)       
 
     login = str(request.form.get('txt'))
     senha = str(request.form.get('pswd'))
 
-    usuario = get_users(login, senha )
+    usuario = get_users(login, senha, conexao)
+
     if usuario:
         is_adm = usuario[0][4]
 
         save_session([login, is_adm])
         if is_adm:
-            return render_template('adm_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), adm_options=True, user_likes=articles_user_like(get_user_logged()))
-        return render_template('usuario_logado.html', usuario=login, articles=home_articles, profile_pic=get_profile_pics(home_articles), show_more_btn=True )
+            articles_user_likes = articles_user_like(get_user_logged(), conexao)
+            profile_pics = get_profile_pics(home_articles, conexao)
+            close_conection(conexao)
+            return render_template('adm_logado.html', usuario=login, articles=home_articles, profile_pic=profile_pics, show_more_btn=True, adm_options=True, user_likes=articles_user_likes)
         
+        articles_user_likes = articles_user_like(get_user_logged(), conexao)
+        profile_pics = get_profile_pics(home_articles, conexao)
+        close_conection(conexao)
+        return render_template('usuario_logado.html', usuario=login, articles=home_articles, profile_pic=profile_pics, show_more_btn=True)
+        
+    close_conection(conexao)
     return render_template('login_page.html', login_fail=True)
 
 
@@ -46,30 +59,37 @@ def create_user():
 
     validate_credentials = validate_login(password, email) # check format
     
-    home_articles = get_articles_db()
-    profile_pics = get_profile_pics(home_articles)
+    conexao = conectardb()
+
+    home_articles = get_articles_db(conexao)
+    profile_pics = get_profile_pics(home_articles, conexao)
     
     if validate_credentials[0] == False:
+        close_conection(conexao)
         return render_template('login_page.html', sigun_up='A senha deve ter formato "Senha1"')
     
     # only try create user if credentials are valid
-    create = create_user_db(name, password, email, isadm) 
-    
+    create = create_user_db(name, password, email, isadm, conexao) 
     # succes creating adm
     if create[0] == False and create[1] == True and isadm == True: 
         session['usuario'] = [name, isadm]
-        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, adm_options=True, profile_pic=profile_pics, user_likes=articles_user_like(get_user_logged()))
+        articles_user_likes = articles_user_like(get_user_logged(), conexao)
+        close_conection(conexao)
+        return render_template('adm_logado.html', articles=home_articles, show_more_btn=True, adm_options=True, profile_pic=profile_pics, user_likes=articles_user_likes)
     
     # fail creating any user
     if create[0] == True and create[1] == False: 
+        close_conection(conexao)
         return render_template('login_page.html', sigun_up='Usuario ou Email já cadastrados')
     
     # sucess creating regular user
     if create[1] and isadm == False:
         session['usuario'] = [name, isadm]
+        close_conection(conexao)
         return render_template('usuario_logado.html', articles=home_articles, profile_pic=profile_pics, show_more_btn=True)
     
     # case any other error
+    close_conection(conexao)
     return render_template('login_page.html', sigun_up='Erro no cadastro')
 
 @logout_bluprint.route('', methods=["GET"])
