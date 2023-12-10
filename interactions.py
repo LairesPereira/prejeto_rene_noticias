@@ -63,9 +63,9 @@ def download_news():
     parsed_article_path = parse_articles_to_download(user, articles)
     
     # read txt file
-    file = open(parsed_article_path)
-    text = file.read()
-    file.close()
+    with open(parsed_article_path, 'r', encoding='utf-8') as file:
+        text = file.read()
+        file.close()
 
     # convert it to .PDF
     text_to_pdf(text, f'{user}.pdf')

@@ -14,6 +14,7 @@ def text_to_pdf(text, filepath):
     pdf.set_auto_page_break(True, margin=margin_bottom_mm)
     pdf.add_page()
     pdf.set_font(family='Courier', size=fontsize_pt)
+
     
     # separa o texto em um lista de strings a partir de cada quebra de linha
     splitted = text.split('\n')
@@ -22,8 +23,7 @@ def text_to_pdf(text, filepath):
         
         # retorna uma lista com strings adequadas ao tamanho da página
         # garante que cada linha não irá ultrapassar o tamanho da páginas
-        lines = textwrap.wrap(line, width_text) 
-        print(lines)
+        lines = textwrap.wrap(line.encode('latin-1', 'replace').decode('latin-1'), width_text) 
         if len(lines) == 0:
             pdf.ln()
 
