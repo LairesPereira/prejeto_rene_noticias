@@ -3,7 +3,7 @@ from PIL import Image
 import os
 from io import BytesIO
 
-def get_profile_pics(articles, conexao=None):
+def get_profile_pics(articles, conexao=None, user=None):
     profile_pics = {}
     users_list = []
     for article in articles:
@@ -11,6 +11,12 @@ def get_profile_pics(articles, conexao=None):
         if not user_name in profile_pics:
             profile_pics[user_name] = None
             users_list.append(user_name)
+
+    if len(users_list) == 0:
+        artic = get_user_articles(user)
+        print('arsaifnasf', artic)
+        return None
+
 
     if len(users_list) == 1:
         pics = get_profile_pic_DB(f'{users_list[0]}', True, conexao)

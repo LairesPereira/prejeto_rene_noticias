@@ -37,7 +37,8 @@ def update_news_page():
     if get_user_logged() and user_isadm():
         conexao = conectardb()
         articles = get_user_articles(get_user_logged(), conexao)
-        profile_pics = get_profile_pics(articles, conexao)
+        print(articles)
+        profile_pics = get_profile_pics(articles, conexao, get_user_logged())
         close_conection(conexao)
         return render_template('user_news.html', articles=articles, update_delete=True, profile_pic=profile_pics, adm_options=True)
     
