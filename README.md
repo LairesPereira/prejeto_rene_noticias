@@ -20,7 +20,7 @@ Para rodar a aplicação, dentro do diretório raiz use o comando:
   Python index.py
 ```
 
-## Deploy
+## RUN
 
 Para rodar a aplicação, dentro do diretório raiz use o comando:
 
